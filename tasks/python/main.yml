@@ -1,0 +1,13 @@
+---
+#  Tasks to setup python in all operating systems
+
+- name: install python
+  script: files/install_python.sh
+  register: bootstrap_install_python_result
+  changed_when: bootstrap_install_python_result.rc > 0
+  failed_when: bootstrap_install_python_result.rc < 0
+  environment:
+    http_proxy: "{{ bootstrap_internet_proxy_http }}"
+    https_proxy: "{{ bootstrap_internet_proxy_https }}"
+  tags:
+    - role::bootstrap

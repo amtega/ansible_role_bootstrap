@@ -1,0 +1,19 @@
+---
+# Tasks to include os specific vars
+
+- name: load variables applicable to all operating systems
+  include_vars: "{{ role_path }}/vars/main.yml"
+
+- name: search specific operating system variables
+  find:
+    paths: "{{ role_path }}/vars"
+    patterns: "*{{ ansible_distribution | lower }}*.yml"
+  when: ansible_distribution | default('') | length > 0
+  register: search_folder_vars_result
+
+- name: load specific operating system variables
+  include_vars: "{{ file.path }}"
+  when: not search_folder_vars_result | skipped
+  with_items: "{{ search_folder_vars_result.files | sort(attribute='path') }}"
+  loop_control:
+    loop_var: file

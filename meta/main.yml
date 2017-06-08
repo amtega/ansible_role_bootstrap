@@ -1,0 +1,20 @@
+---
+# Role dependencies
+
+galaxy_info:
+  author: Juan Antonio Valiño García
+  description: Computer Science Engineer
+  company: Amtega - Xunta de Galicia
+  license: license not defined
+  min_ansible_version: 2.3
+  platforms:
+  - name: Fedora
+    versions:
+    - 25
+  - name: EL
+    versions:
+    - 6
+    - 7
+  galaxy_tags:
+    - ansible
+    - system

@@ -1,0 +1,16 @@
+---
+# Role default lower priority variables
+
+# Ansible users to use to bootstrap the host if the standard ones doesn't work
+
+bootstrap_ansible_user: root
+bootstrap_ansible_password: ''
+# bootstrap_become: false
+# bootstrap_become_method: su
+# bootstrap_become_user: root
+# bootstrap_become_pass: ''
+
+# Internet access proxy
+
+# bootstrap_internet_proxy_http:
+# bootstrap_internet_proxy_https:

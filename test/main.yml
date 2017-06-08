@@ -1,0 +1,66 @@
+---
+# Tasks for tesing role
+
+- name: run idempotence test
+  hosts: localhost
+  roles:
+    - role: docker_presets
+    - role: docker_sandbox
+      docker_sandbox_state: started
+      docker_sandbox_idempotence_test: false
+  tasks:
+    - name: save docker presets user and password for later usage
+      set_fact:
+        bootstrap_ansible_user: "{{ docker_presets_user }}"
+        bootstrap_ansible_password: "{{ docker_presets_password }}"
+
+- name: test sandbox role
+  hosts: docker_sandbox_containers
+  gather_facts: false
+  vars:
+    ansible_user: testinguser1
+    ansible_password: testingpassword1
+    ansible_become: true
+    ansible_become_method: su
+    ansible_become_user: >-
+      {{ hostvars.localhost.bootstrap_ansible_user }}
+    ansible_become_pass: >-
+      {{ hostvars.localhost.bootstrap_ansible_password }}
+  roles:
+    - role: bootstrap
+      bootstrap_ansible_user: >-
+        {{ hostvars.localhost.bootstrap_ansible_user }}
+      bootstrap_ansible_password: >-
+        {{ hostvars.localhost.bootstrap_ansible_password }}
+  tasks:
+    - debug: var=ansible_user
+    - debug: var=ansible_password
+
+    - name: get ansible user
+      getent:
+        database: password
+        key: testinguser1
+      register: get_ansible_user_result
+
+    - name: get ansible become user
+      getent:
+        database: password
+        key: testinguser2
+      register: get_ansible_become_user_result
+
+
+    - debug: var=get_ansible_user_result
+
+    # - name: verify testing environment variables
+    #   assert:
+    #     that:
+    #       - get_testing_variables_result.stdout_lines[0] == "value 1"
+    #       - get_testing_variables_result.stdout_lines[1] == "value 2"
+  tags:
+    - idempotence
+
+- name: cleanup docker docker sandbox
+  hosts: localhost
+  roles:
+    - role: docker_sandbox
+      docker_sandbox_state: absent
