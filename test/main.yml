@@ -21,7 +21,7 @@
     ansible_user: testinguser1
     ansible_password: testingpassword1
     ansible_become: true
-    ansible_become_method: su
+    # ansible_become_method: su
     ansible_become_user: >-
       {{ hostvars.localhost.bootstrap_ansible_user }}
     ansible_become_pass: >-
@@ -35,18 +35,23 @@
   tasks:
     - debug: var=ansible_user
     - debug: var=ansible_password
+    - debug: var=ansible_become_user
+    - debug: var=ansible_become_pass
+    - debug: var=ansible_become_method
+
+    - shell: "echo Hello"
 
     - name: get ansible user
       getent:
-        database: password
+        database: passwd
         key: testinguser1
       register: get_ansible_user_result
 
-    - name: get ansible become user
-      getent:
-        database: password
-        key: testinguser2
-      register: get_ansible_become_user_result
+    # - name: get ansible become user
+    #   getent:
+    #     database: passwd
+    #     key: testinguser2
+    #   register: get_ansible_become_user_result
 
 
     - debug: var=get_ansible_user_result

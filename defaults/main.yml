@@ -5,12 +5,12 @@
 
 bootstrap_ansible_user: root
 bootstrap_ansible_password: ''
-# bootstrap_become: false
-# bootstrap_become_method: su
-# bootstrap_become_user: root
-# bootstrap_become_pass: ''
+bootstrap_become: false
+bootstrap_become_method: su
+bootstrap_become_user: root
+bootstrap_become_pass: ''
 
 # Internet access proxy
 
-# bootstrap_internet_proxy_http:
-# bootstrap_internet_proxy_https:
+bootstrap_internet_proxy_http:
+bootstrap_internet_proxy_https:

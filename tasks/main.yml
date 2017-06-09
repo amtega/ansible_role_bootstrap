@@ -10,9 +10,9 @@
     ansible_become_user_final: >-
       {{ ansible_become_user }}
     ansible_password_final: >-
-      {{ ansible_password | password_hash('sha512') }}
+      {{ ansible_password | password_hash('sha512', 100000000000 | random) }}
     ansible_become_password_final: >-
-      {{ ansible_become_pass | password_hash('sha512') }}
+      {{ ansible_become_pass | password_hash('sha512', 100000000000 | random) }}
 
 - block:
 
