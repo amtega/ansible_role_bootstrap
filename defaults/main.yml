@@ -1,6 +1,10 @@
 ---
 # Role default lower priority variables
 
+# Machine to use as intermediate, usually is the ansible server
+
+bootstrap_delegate: localhost
+
 # Ansible users to use to bootstrap the host if the standard ones doesn't work
 
 bootstrap_ansible_user: root

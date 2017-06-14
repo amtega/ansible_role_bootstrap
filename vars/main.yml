@@ -1,2 +1,9 @@
 ---
 # Role variables
+
+# Group and shell of the ansible users
+
+bootstrap_ansible_user_group: users
+bootstrap_ansible_user_shell: /bin/bash
+bootstrap_ansible_become_user_group: users
+bootstrap_ansible_become_user_shell: /bin/bash

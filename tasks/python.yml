@@ -1,5 +1,5 @@
 ---
-#  Tasks to setup python in all operating systems
+#  Tasks to setup python
 
 - name: install python
   script: files/install_python.sh

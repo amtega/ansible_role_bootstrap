@@ -1,47 +1,29 @@
 ---
 # Bootstrap the server to use ansible
 
-- name: save ansible final user authentication information
-  set_fact:
-    ansible_user_final: >-
-      {{ ansible_user }}
-    ansible_become_final: >-
-      {{ ansible_become }}
-    ansible_become_user_final: >-
-      {{ ansible_become_user }}
-    ansible_password_final: >-
-      {{ ansible_password | password_hash('sha512', 100000000000 | random) }}
-    ansible_become_password_final: >-
-      {{ ansible_become_pass | password_hash('sha512', 100000000000 | random) }}
-
 - block:
 
-  - name: load variables
-    include: tools/os_vars.yml
-    static: false
+  - name: setup auth information
+    include: auth.yml
 
-  - name: launch tasks to setup pyhon
-    include: tools/os_tasks.yml folder=python
-    static: false
-    tags:
-      - role::bootstrap
+  - block:
 
-  - name: launch tasks to setup ansible users
-    include: tools/os_tasks.yml folder=users
-    static: false
-    tags:
-      - role::bootstrap
+    - name: setup pyhon
+      include: python.yml
 
-  - name: reload facts
-    setup:
+    - name: setup ansible users
+      include: users.yml
 
-  vars:
-    ansible_user: "{{ bootstrap_ansible_user }}"
-    ansible_password: "{{ bootstrap_ansible_password }}"
-    ansible_become: "{{ bootstrap_become | default(false) }}"
-    ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
-    ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
+    - name: reload facts
+      setup:
+
+    vars:
+      ansible_user: "{{ bootstrap_ansible_user }}"
+      ansible_password: "{{ bootstrap_ansible_password }}"
+      ansible_become: "{{ bootstrap_become | default(false) }}"
+      ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+      ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+      ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
 
   tags:
     - role::bootstrap

@@ -1,0 +1,12 @@
+---
+# Setup facts with final auth information
+
+- name: save ansible final user authentication information
+  set_fact:
+    bootstrap_ansible_user_final: "{{ ansible_user }}"
+    bootstrap_ansible_become_final: "{{ ansible_become }}"
+    bootstrap_ansible_become_user_final: "{{ ansible_become_user }}"
+    bootstrap_ansible_password_final: "{{ ansible_password }}"
+    bootstrap_ansible_become_password_final: "{{ ansible_become_pass }}"
+  tags:
+    - role::bootstrap

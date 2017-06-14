@@ -1,12 +1,12 @@
 # Ansible bootstrap role
 
-This is an [Ansible](http://www.ansible.com) role to bootstrap a host with the minimum requirements to run ansible installing python and adding ansible main and become user on the host. The role variables allows te specification of the authentication information necessary to acomplish the bootstrap.
+This is an [Ansible](http://www.ansible.com) role to bootstrap a host with the minimum requirements to run ansible installing python and adding ansible main and become user on the host. The role variables allows the specification of the authentication information necessary to acomplish the bootstrap.
 
 The role is designed to be extended easly loading operating system dependant variables and tasks:
 
 - The role dinamically loads variables applicable to all operating systems from `vars/main.yml` and the specific operating system ones from `vars/{{ ansible_distribution | lower }}*.yml`.
 
-- The role dinamically loads taks applicable to all operating systems from `tasks/python/main.yml` and `tasks/users/main.yml`
+- The role dinamically loads tasks applicable to all operating systems from `tasks/python/main.yml` and `tasks/users/main.yml`
 
 - The specific operating system ones are dinamically loaded from the previous tasks dirs looking at the files `{{ ansible_distribution | lower }}*.yml`.
 

@@ -7,12 +7,6 @@
     - role: docker_presets
     - role: docker_sandbox
       docker_sandbox_state: started
-      docker_sandbox_idempotence_test: false
-  tasks:
-    - name: save docker presets user and password for later usage
-      set_fact:
-        bootstrap_ansible_user: "{{ docker_presets_user }}"
-        bootstrap_ansible_password: "{{ docker_presets_password }}"
 
 - name: test sandbox role
   hosts: docker_sandbox_containers
@@ -21,46 +15,39 @@
     ansible_user: testinguser1
     ansible_password: testingpassword1
     ansible_become: true
-    # ansible_become_method: su
+    ansible_become_method: su
     ansible_become_user: >-
-      {{ hostvars.localhost.bootstrap_ansible_user }}
+      {{ hostvars[inventory_hostname].ansible_user }}
     ansible_become_pass: >-
-      {{ hostvars.localhost.bootstrap_ansible_password }}
+      {{ hostvars[inventory_hostname].ansible_password }}
   roles:
     - role: bootstrap
       bootstrap_ansible_user: >-
-        {{ hostvars.localhost.bootstrap_ansible_user }}
+        {{ hostvars[inventory_hostname].ansible_user }}
       bootstrap_ansible_password: >-
-        {{ hostvars.localhost.bootstrap_ansible_password }}
+        {{ hostvars[inventory_hostname].ansible_password }}
   tasks:
-    - debug: var=ansible_user
-    - debug: var=ansible_password
-    - debug: var=ansible_become_user
-    - debug: var=ansible_become_pass
-    - debug: var=ansible_become_method
-
-    - shell: "echo Hello"
-
     - name: get ansible user
       getent:
         database: passwd
-        key: testinguser1
+        key: "{{ ansible_user }}"
       register: get_ansible_user_result
 
-    # - name: get ansible become user
-    #   getent:
-    #     database: passwd
-    #     key: testinguser2
-    #   register: get_ansible_become_user_result
+    - name: get ansible become user
+      getent:
+        database: passwd
+        key: "{{ ansible_become_user }}"
+      register: get_ansible_become_user_result
 
-
-    - debug: var=get_ansible_user_result
-
-    # - name: verify testing environment variables
-    #   assert:
-    #     that:
-    #       - get_testing_variables_result.stdout_lines[0] == "value 1"
-    #       - get_testing_variables_result.stdout_lines[1] == "value 2"
+    - name: verify ansible users
+      assert:
+        that:
+          - >-
+            ansible_user
+              in get_ansible_user_result.ansible_facts.getent_passwd
+          - >-
+            ansible_become_user
+              in get_ansible_become_user_result.ansible_facts.getent_passwd
   tags:
     - idempotence
 

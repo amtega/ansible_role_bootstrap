@@ -1,0 +1,80 @@
+---
+#  Tasks to setup users
+
+- block:
+
+  - name: wait until switch ssh port become available
+    wait_for:
+      host: "{{ ansible_host }}"
+      port: 22
+      state: started
+      delay: 1
+      connect_timeout: 1
+      timeout: 120
+    changed_when: false
+    check_mode: no
+    delegate_to: "{{ bootstrap_delegate }}"
+
+  # Using the delegate machine try to access with final ansible users and if
+  # they don't work setup them
+
+  - name: check ansible user
+    expect:
+      command: >-
+        ssh -l
+        {{ bootstrap_ansible_user_final }}
+        {{ ansible_host }}
+      responses:
+        "(?i)password:": "{{ bootstrap_ansible_password_final }}"
+    changed_when: false
+    failed_when: false
+    register: bootstrap_check_ansible_user_result
+    when:
+      - ansible_user != bootstrap_ansible_user_final
+    delegate_to: "{{ bootstrap_delegate }}"
+
+  - name: check ansible become user
+    expect:
+      command: >-
+        ssh -l
+        {{ bootstrap_ansible_become_user_final }}
+        {{ ansible_host }}
+      responses:
+        "(?i)password:": "{{ bootstrap_ansible_become_password_final }}"
+    changed_when: false
+    failed_when: false
+    register: bootstrap_check_ansible_become_user_result
+    when:
+      - bootstrap_ansible_become_final
+      - ansible_become_user != bootstrap_ansible_become_user_final
+    delegate_to: "{{ bootstrap_delegate }}"
+
+  - name: setup ansible user
+    user:
+      name: "{{ bootstrap_ansible_user_final }}"
+      shell: "{{ bootstrap_ansible_user_shell }}"
+      group: "{{ bootstrap_ansible_user_group }}"
+      password: >-
+        {{ bootstrap_ansible_password_final
+            | password_hash('sha512', 100000000000 | random | string) }}
+    register: bootstrap_create_ansible_user_result
+    when:
+      - ansible_user != bootstrap_ansible_user_final
+      - bootstrap_check_ansible_user_result.stdout | search("denied")
+
+  - name: setup ansible become user
+    user:
+      name: "{{ bootstrap_ansible_become_user_final }}"
+      shell: "{{ bootstrap_ansible_become_user_shell }}"
+      group: "{{ bootstrap_ansible_become_user_group }}"
+      password: >-
+        {{ bootstrap_ansible_password_final
+          | password_hash('sha512', 100000000000 | random | string) }}
+    register: bootstrap_create_ansible_become_user_result
+    when:
+      - bootstrap_ansible_become_final
+      - ansible_become_user != bootstrap_ansible_become_user_final
+      - bootstrap_check_ansible_become_user_result.stdout | search("denied")
+
+  tags:
+    - role::bootstrap
