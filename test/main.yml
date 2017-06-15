@@ -7,8 +7,9 @@
     - role: docker_presets
     - role: docker_sandbox
       docker_sandbox_state: started
+      docker_sandbox_idempotence_test: false
 
-- name: test sandbox role
+- name: test bootstrap role
   hosts: docker_sandbox_containers
   gather_facts: false
   vars:

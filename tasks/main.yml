@@ -3,16 +3,31 @@
 
 - block:
 
-  - name: setup auth information
-    include: auth.yml
+  - name: save ansible final user authentication information
+    set_fact:
+      bootstrap_ansible_user_final: "{{ ansible_user }}"
+      bootstrap_ansible_become_final: "{{ ansible_become }}"
+      bootstrap_ansible_become_user_final: "{{ ansible_become_user }}"
+      bootstrap_ansible_password_final: "{{ ansible_password }}"
+      bootstrap_ansible_become_password_final: "{{ ansible_become_pass }}"
+    tags:
+      - role::bootstrap
 
   - block:
 
-    - name: setup pyhon
-      include: python.yml
+    - name: setup python
+      include: install.yml
+      static: false
+      tags:
+        - role::bootstrap
+        - role::bootstrap::install
 
     - name: setup ansible users
-      include: users.yml
+      include: configure.yml
+      static: false
+      tags:
+        - role::bootstrap
+        - role::bootstrap::configure
 
     - name: reload facts
       setup:
@@ -25,5 +40,4 @@
       ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
       ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
 
-  tags:
-    - role::bootstrap
+  when: bootstrap_enable
