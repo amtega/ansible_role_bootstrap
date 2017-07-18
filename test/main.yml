@@ -23,6 +23,7 @@
       {{ hostvars[inventory_hostname].ansible_password }}
   roles:
     - role: bootstrap
+      bootstrap_enable: true
       bootstrap_ansible_user: >-
         {{ hostvars[inventory_hostname].ansible_user }}
       bootstrap_ansible_password: >-
