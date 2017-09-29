@@ -4,7 +4,7 @@ This is an [Ansible](http://www.ansible.com) role to bootstrap a host with the m
 
 ## Requirements
 
-- Ansible >= 2.3
+- Ansible >= 2.4
 
 ## Role Variables
 

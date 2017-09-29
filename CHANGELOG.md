@@ -12,3 +12,8 @@
 ## 2017-07-18
 
 - Fixed tests.
+
+## 2017-09-29
+
+- Refactored include directives by include_tasks / import_tasks.
+- Updated documentation.

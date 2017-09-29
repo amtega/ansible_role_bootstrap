@@ -16,15 +16,13 @@
   - block:
 
     - name: setup python
-      include: install.yml
-      static: false
+      include_tasks: install.yml
       tags:
         - role::bootstrap
         - role::bootstrap::install
 
     - name: setup ansible users
-      include: configure.yml
-      static: false
+      include_tasks: configure.yml
       tags:
         - role::bootstrap
         - role::bootstrap::configure
