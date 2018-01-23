@@ -4,8 +4,8 @@
 - name: run idempotence test
   hosts: localhost
   roles:
-    - role: docker_presets
-    - role: docker_sandbox
+    - role: amtega.docker_presets
+    - role: amtega.docker_sandbox
       docker_sandbox_state: started
       docker_sandbox_idempotence_test: false
 
@@ -22,7 +22,7 @@
     ansible_become_pass: >-
       {{ hostvars[inventory_hostname].ansible_password }}
   roles:
-    - role: bootstrap
+    - role: amtega.bootstrap
       bootstrap_enable: true
       bootstrap_ansible_user: >-
         {{ hostvars[inventory_hostname].ansible_user }}
@@ -56,5 +56,5 @@
 - name: cleanup docker docker sandbox
   hosts: localhost
   roles:
-    - role: docker_sandbox
+    - role: amtega.docker_sandbox
       docker_sandbox_state: absent
