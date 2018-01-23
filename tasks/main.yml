@@ -2,40 +2,36 @@
 # Bootstrap the server to use ansible
 
 - block:
-
-  - name: save ansible final user authentication information
-    set_fact:
-      bootstrap_ansible_user_final: "{{ ansible_user }}"
-      bootstrap_ansible_become_final: "{{ ansible_become }}"
-      bootstrap_ansible_become_user_final: "{{ ansible_become_user }}"
-      bootstrap_ansible_password_final: "{{ ansible_password }}"
-      bootstrap_ansible_become_password_final: "{{ ansible_become_pass }}"
-    tags:
-      - role::bootstrap
-
-  - block:
-
-    - name: setup python
-      include_tasks: install.yml
+    - name: save ansible final user authentication information
+      set_fact:
+        bootstrap_ansible_user_final: "{{ ansible_user }}"
+        bootstrap_ansible_become_final: "{{ ansible_become }}"
+        bootstrap_ansible_become_user_final: "{{ ansible_become_user }}"
+        bootstrap_ansible_password_final: "{{ ansible_password }}"
+        bootstrap_ansible_become_password_final: "{{ ansible_become_pass }}"
       tags:
         - role::bootstrap
-        - role::bootstrap::install
 
-    - name: setup ansible users
-      include_tasks: configure.yml
-      tags:
-        - role::bootstrap
-        - role::bootstrap::configure
+    - block:
+      - name: setup python
+        include_tasks: install.yml
+        tags:
+          - role::bootstrap
+          - role::bootstrap::install
 
-    - name: reload facts
-      setup:
+      - name: setup ansible users
+        include_tasks: configure.yml
+        tags:
+          - role::bootstrap
+          - role::bootstrap::configure
 
-    vars:
-      ansible_user: "{{ bootstrap_ansible_user }}"
-      ansible_password: "{{ bootstrap_ansible_password }}"
-      ansible_become: "{{ bootstrap_become | default(false) }}"
-      ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-      ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
-      ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
-
+      - name: reload facts
+        setup:
+      vars:
+        ansible_user: "{{ bootstrap_ansible_user }}"
+        ansible_password: "{{ bootstrap_ansible_password }}"
+        ansible_become: "{{ bootstrap_become | default(false) }}"
+        ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
   when: bootstrap_enable

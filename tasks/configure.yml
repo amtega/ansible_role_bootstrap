@@ -2,30 +2,28 @@
 #  Tasks to setup users
 
 - block:
+    - name: setup ansible user
+      user:
+        name: "{{ bootstrap_ansible_user_final }}"
+        shell: "{{ bootstrap_ansible_user_shell }}"
+        group: "{{ bootstrap_ansible_user_group }}"
+        password: >-
+          {{ bootstrap_ansible_password_final
+             | password_hash('sha512', 100000000000 | random | string) }}
+      register: bootstrap_create_ansible_user_result
+      when: ansible_user != bootstrap_ansible_user_final
 
-  - name: setup ansible user
-    user:
-      name: "{{ bootstrap_ansible_user_final }}"
-      shell: "{{ bootstrap_ansible_user_shell }}"
-      group: "{{ bootstrap_ansible_user_group }}"
-      password: >-
-        {{ bootstrap_ansible_password_final
-            | password_hash('sha512', 100000000000 | random | string) }}
-    register: bootstrap_create_ansible_user_result
-    when: ansible_user != bootstrap_ansible_user_final
-
-  - name: setup ansible become user
-    user:
-      name: "{{ bootstrap_ansible_become_user_final }}"
-      shell: "{{ bootstrap_ansible_become_user_shell }}"
-      group: "{{ bootstrap_ansible_become_user_group }}"
-      password: >-
-        {{ bootstrap_ansible_password_final
-          | password_hash('sha512', 100000000000 | random | string) }}
-    register: bootstrap_create_ansible_become_user_result
-    when:
-      - bootstrap_ansible_become_final
-      - ansible_become_user != bootstrap_ansible_become_user_final
-
+    - name: setup ansible become user
+      user:
+        name: "{{ bootstrap_ansible_become_user_final }}"
+        shell: "{{ bootstrap_ansible_become_user_shell }}"
+        group: "{{ bootstrap_ansible_become_user_group }}"
+        password: >-
+          {{ bootstrap_ansible_password_final
+             | password_hash('sha512', 100000000000 | random | string) }}
+      register: bootstrap_create_ansible_become_user_result
+      when:
+        - bootstrap_ansible_become_final
+        - ansible_become_user != bootstrap_ansible_become_user_final
   tags:
     - role::bootstrap
