@@ -7,7 +7,8 @@
   changed_when: bootstrap_install_python_result.rc > 0
   failed_when: bootstrap_install_python_result.rc < 0
   environment:
-    http_proxy: "{{ bootstrap_internet_proxy_http }}"
-    https_proxy: "{{ bootstrap_internet_proxy_https }}"
+    http_proxy: "{{ bootstrap_http_proxy }}"
+    https_proxy: "{{ bootstrap_https_proxy }}"
+    http_no_proxy: "{{ bootstrap_no_proxy }}"
   tags:
     - role::bootstrap

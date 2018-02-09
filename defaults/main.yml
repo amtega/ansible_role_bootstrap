@@ -17,5 +17,6 @@ bootstrap_become_pass: ''
 
 # Internet access proxy
 
-bootstrap_internet_proxy_http:
-bootstrap_internet_proxy_https:
+#bootstrap_http_proxy:
+#bootstrap_https_proxy:
+#bootstrap_http_no_proxy:
