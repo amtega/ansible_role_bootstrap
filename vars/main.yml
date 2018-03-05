@@ -7,3 +7,8 @@ bootstrap_ansible_user_group: users
 bootstrap_ansible_user_shell: /bin/bash
 bootstrap_ansible_become_user_group: users
 bootstrap_ansible_become_user_shell: /bin/bash
+
+# Required packages
+
+bootstrap_packages:
+  - libselinux-python
