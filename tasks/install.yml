@@ -12,3 +12,9 @@
     http_no_proxy: "{{ bootstrap_no_proxy }}"
   tags:
     - role::bootstrap
+
+- name: install minimum required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ bootstrap_packages }}"
