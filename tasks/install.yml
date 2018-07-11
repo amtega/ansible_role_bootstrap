@@ -17,4 +17,4 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ bootstrap_packages }}"
+  loop: "{{ bootstrap_packages }}"
