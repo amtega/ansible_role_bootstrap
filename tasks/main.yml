@@ -2,15 +2,8 @@
 # Bootstrap the server to use ansible
 
 - block:
-    - name: save ansible final user authentication information
-      set_fact:
-        bootstrap_ansible_user_final: "{{ ansible_user }}"
-        bootstrap_ansible_password_final: "{{ ansible_password }}"
-        bootstrap_ansible_become_final: "{{ ansible_become | default(false) }}"
-        bootstrap_ansible_become_user_final: >-
-          {{ ansible_become_user | default('') }}
-        bootstrap_ansible_become_password_final: >-
-          {{ ansible_become_pass | default('') }}
+    - name: setup ansible connection facts
+      include_tasks: facts.yml
       tags:
         - role::bootstrap
 
