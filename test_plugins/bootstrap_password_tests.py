@@ -16,17 +16,17 @@ def bootstrap_password_match(username, password):
     Returns:
         bool: true if username/password is valid or false if not.
     """
-    cryptedpasswd = getspnam(username)[1]
-    if cryptedpasswd:
+    try:
+        cryptedpasswd = getspnam(username)[1]
         return crypt(password, cryptedpasswd) == cryptedpasswd
-    else:
+    except:
         return False
 
 
 class TestModule:
-    ''' Ansible math jinja2 tests '''
+    """ Ansible tests """
 
     def tests(self):
         return {
-            'bootstrap_password_match': bootstrap_password_match
+            'bootstrap_password_match': bootstrap_password_match,
         }
