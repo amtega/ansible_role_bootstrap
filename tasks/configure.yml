@@ -2,12 +2,6 @@
 #  Tasks to setup users
 
 - block:
-    - debug: msg="{{ bootstrap_ansible_user_final is bootstrap_password_match(bootstrap_ansible_password_final) }}"
-
-
-
-    - fail:
-
     - name: setup ansible user
       user:
         name: "{{ bootstrap_ansible_user_final }}"
@@ -15,7 +9,9 @@
         group: "{{ bootstrap_ansible_user_group }}"
         password: "{{ bootstrap_ansible_password_final }}"
       register: bootstrap_create_ansible_user_result
-      when: ansible_user != bootstrap_ansible_user_final
+      when: >-
+        bootstrap_ansible_user_final
+        is not bootstrap_password_match(bootstrap_ansible_password_final)
 
     - name: setup ansible become user
       user:
@@ -26,6 +22,9 @@
       register: bootstrap_create_ansible_become_user_result
       when:
         - bootstrap_ansible_become_final
-        - ansible_become_user != bootstrap_ansible_become_user_final
+        - >-
+          bootstrap_ansible_become_user_final
+          is not bootstrap_password_match(
+                   bootstrap_ansible_become_password_final)
   tags:
     - role::bootstrap
