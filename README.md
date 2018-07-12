@@ -10,6 +10,18 @@ This is an [Ansible](http://www.ansible.com) role to bootstrap a host with the m
 
 A list of all the default variables for this role is available in `defaults/main.yml`.
 
+## Modules
+
+The role provides these modules:
+
+- bootstrap_shadow_facts: get remote encrypted shadow password information for a set of users.
+
+## Tests
+
+The role provides these tests:
+
+- bootstrap_shadow_match: test if given a clear password match with a shadow ecnrypted password (shadow password information can be obtanied using bootstrap_shadow_facts module described previously)
+
 ## Dependencies
 
 None.
