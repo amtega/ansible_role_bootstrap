@@ -14,12 +14,7 @@ def main():
     module = AnsibleModule(argument_spec=dict(usernames=dict(
                                                 type=list, required=True)))
     try:
-        module_usernames = module.params['usernames']
-        if type(module_usernames) is not list:
-            usernames = [module_usernames]
-        else:
-            usernames = module_usernames
-
+        usernames = module.params['usernames']
         shadows_facts = dict()
         for username in usernames:
             try:
