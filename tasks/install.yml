@@ -1,20 +1,28 @@
 ---
 #  Tasks to setup python
 
-- name: install python
-  script: files/install_python.sh
-  register: bootstrap_install_python_result
-  changed_when: bootstrap_install_python_result.rc > 0
-  failed_when: bootstrap_install_python_result.rc < 0
-  environment:
-    http_proxy: "{{ bootstrap_http_proxy }}"
-    https_proxy: "{{ bootstrap_https_proxy }}"
-    http_no_proxy: "{{ bootstrap_no_proxy }}"
-  tags:
-    - role::bootstrap
+- block:
+    - name: install python
+      script: files/install_python.sh
+      register: bootstrap_install_python_result
+      changed_when: bootstrap_install_python_result.rc > 0
+      failed_when: bootstrap_install_python_result.rc < 0
+      environment:
+        http_proxy: "{{ bootstrap_http_proxy }}"
+        https_proxy: "{{ bootstrap_https_proxy }}"
+        http_no_proxy: "{{ bootstrap_no_proxy }}"
+      tags:
+        - role::bootstrap
 
-- name: install minimum required packages
-  package:
-    name: "{{ item }}"
-    state: present
-  loop: "{{ bootstrap_packages }}"
+    - name: install minimum required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ bootstrap_packages }}"
+  vars:
+    ansible_user: "{{ bootstrap_ansible_user }}"
+    ansible_password: "{{ bootstrap_ansible_password }}"
+    ansible_become: "{{ bootstrap_become | default(false) }}"
+    ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+    ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
