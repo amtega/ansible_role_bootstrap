@@ -1,0 +1,46 @@
+---
+
+# Setup ansible connection facts
+
+- block:
+    - name: setup fact with ansible users authentication information to update
+      set_fact:
+        bootstrap_ansible_user_to_update: "{{ ansible_user }}"
+        bootstrap_ansible_new_password: >-
+          {{ ansible_password
+             | password_hash('sha512', 100000000000 | random | string) }}
+        bootstrap_ansible_become_activated: >-
+         {{ ansible_become | default(false) }}
+        bootstrap_ansible_become_user_to_update: >-
+          {{ ansible_become_user | default('') }}
+        bootstrap_ansible_become_new_password: >-
+          {{ ansible_become_pass
+             | default('')
+             | password_hash('sha512', 100000000000 | random | string) }}
+
+    - name: get ansible users shadow password information
+      bootstrap_shadow_facts:
+        usernames:
+          - "{{ bootstrap_ansible_user_to_update }}"
+          - "{{ bootstrap_ansible_become_user_to_update }}"
+      register: bootstrap_get_shadows_result
+      vars:
+        ansible_user: "{{ bootstrap_ansible_user }}"
+        ansible_password: "{{ bootstrap_ansible_password }}"
+        ansible_become: "{{ bootstrap_become | default(false) }}"
+        ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
+
+    - name: setup facts indicating if it is necesary to update ansible users
+      set_fact:
+        bootstrap_ansible_user_needs_update: >-
+          {{ not ansible_password
+                 is bootstrap_shadow_match(shadows[ansible_user]) }}
+        bootstrap_ansible_become_user_needs_update: >-
+          {{ not ansible_become_pass
+                 is bootstrap_shadow_match(shadows[ansible_become_user]) }}
+  vars:
+    shadows: "{{ bootstrap_get_shadows_result.shadows }}"
+  tags:
+    - role::bootstrap

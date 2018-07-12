@@ -4,26 +4,30 @@
 - block:
     - name: setup ansible user
       user:
-        name: "{{ bootstrap_ansible_user_final }}"
+        name: "{{ bootstrap_ansible_user_to_update }}"
         shell: "{{ bootstrap_ansible_user_shell }}"
         group: "{{ bootstrap_ansible_user_group }}"
-        password: >-
-          {{ bootstrap_ansible_password_final
-             | password_hash('sha512', 100000000000 | random | string) }}
+        password: "{{ bootstrap_ansible_new_password }}"
       register: bootstrap_create_ansible_user_result
-      when: ansible_user != bootstrap_ansible_user_final
+      when:
+        - bootstrap_ansible_user_needs_update
 
     - name: setup ansible become user
       user:
-        name: "{{ bootstrap_ansible_become_user_final }}"
+        name: "{{ bootstrap_ansible_become_user_to_update }}"
         shell: "{{ bootstrap_ansible_become_user_shell }}"
         group: "{{ bootstrap_ansible_become_user_group }}"
-        password: >-
-          {{ bootstrap_ansible_password_final
-             | password_hash('sha512', 100000000000 | random | string) }}
+        password: "{{ bootstrap_ansible_become_new_password }}"
       register: bootstrap_create_ansible_become_user_result
       when:
-        - bootstrap_ansible_become_final
-        - ansible_become_user != bootstrap_ansible_become_user_final
+        - bootstrap_ansible_become_activated
+        - bootstrap_ansible_become_user_needs_update
+  vars:
+    ansible_user: "{{ bootstrap_ansible_user }}"
+    ansible_password: "{{ bootstrap_ansible_password }}"
+    ansible_become: "{{ bootstrap_become | default(false) }}"
+    ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+    ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
   tags:
     - role::bootstrap
