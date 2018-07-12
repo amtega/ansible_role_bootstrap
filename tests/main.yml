@@ -13,7 +13,6 @@
 
     - role: amtega.docker_sandbox
       docker_sandbox_state: started
-      docker_sandbox_idempotence_test: false
   tags:
     - sandbox
 
@@ -37,6 +36,22 @@
       bootstrap_ansible_password: >-
         {{ hostvars[inventory_hostname].ansible_password }}
   tasks:
+    - name: test bootstrap_shadow_facts module with a list of users
+      bootstrap_shadow_facts:
+        usernames:
+          - root
+          - daemon
+      register: module_result
+      failed_when: >-
+        "root" not in module_result.shadows
+        or "daemon" not in module_result.shadows
+
+    - name: test bootstrap_shadow_match filter
+      assert:
+        that: password is bootstrap_shadow_match(module_result.shadows.root)
+      vars:
+        password: "root"
+
     - name: get ansible user
       getent:
         database: passwd
