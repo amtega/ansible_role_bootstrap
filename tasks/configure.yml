@@ -5,21 +5,23 @@
     - name: setup ansible user
       user:
         name: "{{ bootstrap_ansible_user_to_update }}"
-        shell: "{{ bootstrap_ansible_user_shell }}"
-        group: "{{ bootstrap_ansible_user_group }}"
+        shell: "{{ bootstrap_ansible_user_shell | default(omit) }}"
+        group: "{{ bootstrap_ansible_user_group | default(omit) }}"
         password: "{{ bootstrap_ansible_new_password }}"
       register: bootstrap_create_ansible_user_result
       when:
+        - bootstrap_provisone_ansible_user
         - bootstrap_ansible_user_needs_update
 
     - name: setup ansible become user
       user:
         name: "{{ bootstrap_ansible_become_user_to_update }}"
-        shell: "{{ bootstrap_ansible_become_user_shell }}"
-        group: "{{ bootstrap_ansible_become_user_group }}"
+        shell: "{{ bootstrap_ansible_become_user_shell | default(omit) }}"
+        group: "{{ bootstrap_ansible_become_user_group | default(omit) }}"
         password: "{{ bootstrap_ansible_become_new_password }}"
       register: bootstrap_create_ansible_become_user_result
       when:
+        - bootstrap_provisone_ansible_become_user
         - bootstrap_ansible_become_activated
         - bootstrap_ansible_become_user_needs_update
   vars:
