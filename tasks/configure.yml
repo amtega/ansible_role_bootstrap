@@ -24,12 +24,5 @@
         - bootstrap_provisone_ansible_become_user
         - bootstrap_ansible_become_activated
         - bootstrap_ansible_become_user_needs_update
-  vars:
-    ansible_user: "{{ bootstrap_ansible_user }}"
-    ansible_password: "{{ bootstrap_ansible_password }}"
-    ansible_become: "{{ bootstrap_become | default(false) }}"
-    ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
-    ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
   tags:
     - role::bootstrap
