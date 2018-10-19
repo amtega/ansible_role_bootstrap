@@ -4,20 +4,12 @@
 - block:
     - name: setup ansible connection facts
       include_tasks: facts.yml
-      tags:
-        - role::bootstrap
 
     - name: setup python
       include_tasks: install.yml
-      tags:
-        - role::bootstrap
-        - role::bootstrap::install
 
     - name: setup ansible users
       include_tasks: configure.yml
-      tags:
-        - role::bootstrap
-        - role::bootstrap::configure
 
     - name: reload facts
       setup:
@@ -29,3 +21,5 @@
     ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
     ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
     ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
+  tags:
+    - role::bootstrap
