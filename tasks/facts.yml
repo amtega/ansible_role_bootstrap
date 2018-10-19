@@ -44,3 +44,4 @@
     shadows: "{{ bootstrap_get_shadows_result.shadows }}"
   tags:
     - role::bootstrap
+    - role::bootstrap::facts

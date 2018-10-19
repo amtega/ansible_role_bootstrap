@@ -5,3 +5,16 @@
 
 bootstrap_packages:
   - libselinux-python
+
+# Proxy environment settings
+
+bootstrap_http_proxy_config:
+    http_proxy: "{{ bootstrap_http_proxy | default('') }}"
+    https_proxy: "{{ bootstrap_https_proxy | default('') }}"
+    http_no_proxy: "{{ bootstrap_no_proxy | default('') }}"
+
+bootstrap_http_proxy_environment: >-
+  {{ (bootstrap_http_proxy is defined
+      or bootstrap_https_proxy is defined
+      or bootstrap_no_proxy is defined)
+     | ternary(bootstrap_http_proxy_config, {}) }}

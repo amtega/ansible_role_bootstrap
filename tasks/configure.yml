@@ -26,3 +26,4 @@
         - bootstrap_ansible_become_user_needs_update
   tags:
     - role::bootstrap
+    - role::bootstrap::configure
