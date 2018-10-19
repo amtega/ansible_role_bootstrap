@@ -2,6 +2,7 @@
 # Role dependencies
 
 galaxy_info:
+  role_name: bootstrap
   author: Juan Antonio Valiño García
   description: Bootstrap a host with the minimum requirements to run ansible
   company: AMTEGA - Xunta de Galicia
