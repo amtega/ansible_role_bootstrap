@@ -5,21 +5,22 @@
     - name: setup ansible connection facts
       include_tasks: facts.yml
 
-    - name: setup python
-      include_tasks: install.yml
+    - block:
+        - name: setup python
+          include_tasks: install.yml
 
-    - name: setup ansible users
-      include_tasks: configure.yml
+        - name: setup ansible users
+          include_tasks: users.yml
 
-    - name: reload facts
-      setup:
+        - name: reload facts
+          setup:
+      vars:
+        ansible_user: "{{ bootstrap_ansible_user }}"
+        ansible_password: "{{ bootstrap_ansible_password }}"
+        ansible_become: "{{ bootstrap_become | default(false) }}"
+        ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
   when: bootstrap_enable
-  vars:
-    ansible_user: "{{ bootstrap_ansible_user }}"
-    ansible_password: "{{ bootstrap_ansible_password }}"
-    ansible_become: "{{ bootstrap_become | default(false) }}"
-    ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
-    ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
   tags:
     - role::bootstrap
