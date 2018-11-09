@@ -8,6 +8,7 @@
         bootstrap_ansible_user_to_update: "{{ ansible_user }}"
         bootstrap_ansible_new_password: >-
           {{ ansible_password
+             | string
              | password_hash('sha512', 100000000000 | random | string) }}
         bootstrap_ansible_become_activated: >-
          {{ ansible_become | default(false) }}
@@ -16,6 +17,7 @@
         bootstrap_ansible_become_new_password: >-
           {{ ansible_become_pass
              | default('')
+             | string
              | password_hash('sha512', 100000000000 | random | string) }}
 
     - name: get ansible users shadow password information
