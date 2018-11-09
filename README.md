@@ -24,7 +24,7 @@ The role provides these tests:
 
 ## Dependencies
 
-None.
+[amtega.proxy_client](https://galaxy.ansible.com/amtega/proxy_client). If you need internet access to download packages fill this role variables.
 
 ## Example Playbook
 

@@ -7,7 +7,7 @@
       register: bootstrap_install_python_result
       changed_when: bootstrap_install_python_result.rc > 0
       failed_when: bootstrap_install_python_result.rc < 0
-      environment: "{{ bootstrap_http_proxy_environment }}"
+      environment: "{{ proxy_client_environment }}"
 
     - name: install minimum required packages
       package:
