@@ -14,7 +14,7 @@ bootstrap_http_proxy_config:
     http_no_proxy: "{{ bootstrap_no_proxy | default('') }}"
 
 bootstrap_http_proxy_environment: >-
-  {{ (bootstrap_http_proxy is defined
-      or bootstrap_https_proxy is defined
-      or bootstrap_no_proxy is defined)
+  {{ (bootstrap_http_proxy is not none
+      or bootstrap_https_proxy is not none
+      or bootstrap_no_proxy is not none)
      | ternary(bootstrap_http_proxy_config, {}) }}
