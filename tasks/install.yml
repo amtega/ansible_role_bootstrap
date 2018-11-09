@@ -12,6 +12,7 @@
     - name: install minimum required packages
       package:
         name: "{{ item }}"
+        use: yum
         state: present
       loop: "{{ bootstrap_packages }}"
   tags:
