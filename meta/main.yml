@@ -23,4 +23,5 @@ galaxy_info:
     - system
 
 dependencies:
-  - amtega.proxy_client
+  - role: amtega.proxy_client
+    proxy_client_permanent: false
