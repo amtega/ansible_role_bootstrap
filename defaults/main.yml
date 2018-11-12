@@ -29,13 +29,13 @@ bootstrap_become_pass: ''
 # Group and shell of the ansible/become users to setup as part of the bootstrap
 # process.
 
-#bootstrap_ansible_user_group: users
-#bootstrap_ansible_user_shell: /bin/bash
-#bootstrap_ansible_become_user_group: users
-#bootstrap_ansible_become_user_shell: /bin/bash
+bootstrap_ansible_user_group: users
+bootstrap_ansible_user_shell: /bin/bash
+bootstrap_ansible_become_user_group: users
+bootstrap_ansible_become_user_shell: /bin/bash
 
 # Internet access proxy
 
-#bootstrap_http_proxy:
-#bootstrap_https_proxy:
-#bootstrap_http_no_proxy:
+bootstrap_http_proxy:
+bootstrap_https_proxy:
+bootstrap_http_no_proxy:

@@ -7,17 +7,21 @@ galaxy_info:
   description: Bootstrap a host with the minimum requirements to run ansible
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
-  min_ansible_version: 2.6
+  min_ansible_version: 2.7
   platforms:
-  - name: Fedora
-    versions:
-      - 27
-      - 28
   - name: EL
     versions:
       - 6
       - 7
+  - name: Fedora
+    versions:
+      - 27
+      - 28
   galaxy_tags:
     - ansible
     - bootstrap
     - system
+
+dependencies:
+  - role: amtega.proxy_client
+    proxy_client_permanent: false
