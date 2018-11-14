@@ -9,14 +9,14 @@ galaxy_info:
   license: GPLv3 or EUPL
   min_ansible_version: 2.7
   platforms:
-  - name: EL
-    versions:
-      - 6
-      - 7
-  - name: Fedora
-    versions:
-      - 27
-      - 28
+    - name: Fedora
+      versions:
+        - 27
+        - 28
+    - name: EL
+      versions:
+        - 6
+        - 7
   galaxy_tags:
     - ansible
     - bootstrap
@@ -24,4 +24,4 @@ galaxy_info:
 
 dependencies:
   - role: amtega.proxy_client
-    proxy_client_permanent: false
+    proxy_client_permanent: no
