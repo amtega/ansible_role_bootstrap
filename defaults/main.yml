@@ -13,7 +13,7 @@ bootstrap_provisone_ansible_user: true
 bootstrap_provisone_ansible_become_user: true
 
 # Ansible users to use to bootstrap the server. Take note that this are not the
-# users you  want to exist after bootstrapping. The final users that will
+# users you want to exist after bootstrapping. The final users that will
 # provisioned after the bootstrap process are the ones specified in the host
 # inventory using ansible_user and ansible_become_user variables (with their
 # respective passwords). The users specified here only are used to bootstrap the
