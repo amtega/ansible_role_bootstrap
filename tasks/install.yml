@@ -2,14 +2,14 @@
 #  Tasks to setup python
 
 - block:
-    - name: install python
+    - name: Install python
       script: files/install_python.sh
       register: bootstrap_install_python_result
       changed_when: bootstrap_install_python_result.rc > 0
       failed_when: bootstrap_install_python_result.rc < 0
       environment: "{{ proxy_client_environment }}"
 
-    - name: install minimum required packages
+    - name: Install minimum required packages
       package:
         name: "{{ item }}"
         use: yum

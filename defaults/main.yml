@@ -4,16 +4,16 @@
 # Enable bootstrap. This role may have important consecuences, so by default is
 # disabled.
 
-bootstrap_enable: false
+bootstrap_enable: no
 
 # Indicate if the bootstrap process must provisione local users for
 # ansible_user and ansible_become_user specified in the host inventory.
 
-bootstrap_provisone_ansible_user: true
-bootstrap_provisone_ansible_become_user: true
+bootstrap_provisone_ansible_user: yes
+bootstrap_provisone_ansible_become_user: yes
 
 # Ansible users to use to bootstrap the server. Take note that this are not the
-# users you  want to exist after bootstrapping. The final users that will
+# users you want to exist after bootstrapping. The final users that will
 # provisioned after the bootstrap process are the ones specified in the host
 # inventory using ansible_user and ansible_become_user variables (with their
 # respective passwords). The users specified here only are used to bootstrap the
@@ -21,7 +21,7 @@ bootstrap_provisone_ansible_become_user: true
 
 bootstrap_ansible_user: root
 bootstrap_ansible_password: ''
-bootstrap_become: false
+bootstrap_become: no
 bootstrap_become_method: su
 bootstrap_become_user: root
 bootstrap_become_pass: ''
@@ -33,9 +33,3 @@ bootstrap_ansible_user_group: users
 bootstrap_ansible_user_shell: /bin/bash
 bootstrap_ansible_become_user_group: users
 bootstrap_ansible_become_user_shell: /bin/bash
-
-# Internet access proxy
-
-bootstrap_http_proxy:
-bootstrap_https_proxy:
-bootstrap_http_no_proxy:

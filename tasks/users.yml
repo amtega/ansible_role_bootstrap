@@ -2,7 +2,7 @@
 #  Tasks to setup users
 
 - block:
-    - name: setup ansible user
+    - name: Setup ansible user
       user:
         name: "{{ bootstrap_ansible_user_to_update }}"
         shell: "{{ bootstrap_ansible_user_shell }}"
@@ -13,7 +13,7 @@
         - bootstrap_provisone_ansible_user
         - bootstrap_ansible_user_needs_update
 
-    - name: setup ansible become user
+    - name: Setup ansible become user
       user:
         name: "{{ bootstrap_ansible_become_user_to_update }}"
         shell: "{{ bootstrap_ansible_become_user_shell }}"
