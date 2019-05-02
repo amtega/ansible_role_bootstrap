@@ -2,10 +2,6 @@
 
 This is an [Ansible](http://www.ansible.com) role to bootstrap a host with the minimum requirements to run ansible installing python and adding ansible main and become user on the host. The role variables allows the specification of the authentication information necessary to acomplish the bootstrap.
 
-## Requirements
-
-[Ansible 2.7+](http://docs.ansible.com/ansible/latest/intro_installation.html)
-
 ## Role Variables
 
 A list of all the default variables for this role is available in `defaults/main.yml`.
@@ -21,10 +17,6 @@ The role provides these modules:
 The role provides these tests:
 
 - bootstrap_shadow_match: test if given a clear password match a shadow ecnrypted password (shadow password information can be obtanied using bootstrap_shadow_facts module described previously)
-
-## Dependencies
-
-[amtega.proxy_client](https://galaxy.ansible.com/amtega/proxy_client). If you need a proxy for internet access fill this role variables.
 
 ## Example Playbook
 
@@ -54,7 +46,7 @@ $ ansible-playbook main.yml
 
 ## License
 
-Copyright (C) 2018 AMTEGA - Xunta de Galicia
+Copyright (C) 2019 AMTEGA - Xunta de Galicia
 
 This role is free software: you can redistribute it and/or modify it under the terms of:
 

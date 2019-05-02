@@ -3,7 +3,7 @@
 # Setup ansible connection facts
 
 - block:
-    - name: setup fact with ansible users authentication information to update
+    - name: Setup fact with ansible users authentication information to update
       set_fact:
         bootstrap_ansible_user_to_update: "{{ ansible_user }}"
         bootstrap_ansible_new_password: >-
@@ -20,7 +20,7 @@
              | string
              | password_hash('sha512', 100000000000 | random | string) }}
 
-    - name: get ansible users shadow password information
+    - name: Get ansible users shadow password information
       bootstrap_shadow_facts:
         usernames:
           - "{{ bootstrap_ansible_user_to_update }}"
@@ -34,7 +34,7 @@
         ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
         ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
 
-    - name: setup facts indicating if it is necesary to update ansible users
+    - name: Setup facts indicating if it is necesary to update ansible users
       set_fact:
         bootstrap_ansible_user_needs_update: >-
           {{ not ansible_password

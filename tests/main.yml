@@ -1,7 +1,7 @@
 ---
 # Tasks for testing role
 
-- name: run idempotence test
+- name: Run idempotence test
   hosts: localhost
   roles:
     - role: amtega.docker_presets
@@ -9,14 +9,15 @@
         [? starts_with(name, `centos-6`)
            || starts_with(name, `centos-7`)
            || starts_with(name, `fedora-27`)
-           || starts_with(name, `fedora-28`) ]
+           || starts_with(name, `fedora-28`)
+           || starts_with(name, `fedora-29`)]
 
     - role: amtega.docker_sandbox
       docker_sandbox_state: started
   tags:
     - sandbox
 
-- name: test bootstrap role
+- name: Test bootstrap role
   hosts: docker_sandbox_containers
   gather_facts: false
   vars:
@@ -36,7 +37,7 @@
       bootstrap_ansible_password: >-
         {{ hostvars[inventory_hostname].ansible_password }}
   tasks:
-    - name: test bootstrap_shadow_facts module with a list of users
+    - name: Test bootstrap_shadow_facts module with a list of users
       bootstrap_shadow_facts:
         usernames:
           - root
@@ -46,25 +47,25 @@
         "root" not in module_result.shadows
         or "daemon" not in module_result.shadows
 
-    - name: test bootstrap_shadow_match filter
+    - name: Test bootstrap_shadow_match filter
       assert:
         that: password is bootstrap_shadow_match(module_result.shadows.root)
       vars:
         password: "root"
 
-    - name: get ansible user
+    - name: Get ansible user
       getent:
         database: passwd
         key: "{{ ansible_user }}"
       register: get_ansible_user_result
 
-    - name: get ansible become user
+    - name: Get ansible become user
       getent:
         database: passwd
         key: "{{ ansible_become_user }}"
       register: get_ansible_become_user_result
 
-    - name: verify ansible users
+    - name: Verify ansible users
       assert:
         that:
           - >-
@@ -76,7 +77,7 @@
   tags:
     - idempotence
 
-- name: cleanup docker docker sandbox
+- name: Cleanup docker docker sandbox
   hosts: localhost
   roles:
     - role: amtega.docker_sandbox
