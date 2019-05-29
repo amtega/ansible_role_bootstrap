@@ -1,11 +1,9 @@
 #!/bin/bash
 
-changed=0
-
 if [ -f /usr/bin/dnf ]; then
-  (rpm -q python2 || rpm -q python-2*) || (dnf install -y python2 ; exit 1)
+  (rpm -q python3 && rpm -q python3-virtualenv) || (dnf install -y python3 python3-virtualenv ; exit 1)
 elif [ -f /usr/bin/yum ]; then
-  (rpm -q python2 || rpm -q python-2*) || (yum install -y python2 ; exit 1)
+  (rpm -q python && rpm -q python-virtualenv) || (yum install -y python python-virtualenv ; exit 1)
 else
-  exit -1
+  exit 1
 fi
