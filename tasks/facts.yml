@@ -3,6 +3,27 @@
 # Setup ansible connection facts
 
 - block:
+    - name: Gather operating system release
+      shell: >-
+        cat /etc/centos-release \
+        || cat /etc/rhel-release \
+        || cat /etc/fedora-release
+      args:
+        warn: no
+      changed_when: no
+      register: bootstrap_os_result
+
+    - name: Setup fact with operating system info
+      set_fact:
+        bootstrap_distribution_name: >-
+          {{ bootstrap_os_result.stdout
+            | regex_replace(bootstrap_os_release_regex, "\1") }}
+        bootstrap_distribution_version: >-
+          {{ bootstrap_os_result.stdout
+            | regex_replace(bootstrap_os_release_regex, "\2") }}
+      vars:
+        bootstrap_os_release_regex: "([a-zA-Z]+) .* release ([0-9.]+) .*"
+
     - name: Setup fact with ansible users authentication information to update
       set_fact:
         bootstrap_ansible_user_to_update: "{{ ansible_user }}"

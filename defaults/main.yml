@@ -33,3 +33,15 @@ bootstrap_ansible_user_group: users
 bootstrap_ansible_user_shell: /bin/bash
 bootstrap_ansible_become_user_group: users
 bootstrap_ansible_become_user_shell: /bin/bash
+
+# Python interpreter to use by bootstrap
+
+# bootstrap_ansible_python_interpreter:
+
+#
+# Python virtual env configuration.
+#
+# bootstrap_python_virtualenv:
+# bootstrap_python_virtualenv_command:
+# bootstrap_python_virtualenv_python:
+# bootstrap_python_virtualenv_site_packages:

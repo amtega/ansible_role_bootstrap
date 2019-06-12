@@ -4,16 +4,22 @@
 - block:
     - name: Setup ansible connection facts
       include_tasks: facts.yml
+      vars:
+        ansible_python_interpreter: /usr/bin/python
 
     - block:
         - name: Setup python
           include_tasks: install.yml
 
-        - name: Setup ansible users
-          include_tasks: users.yml
+        - block:
+            - name: Setup ansible users
+              include_tasks: users.yml
 
-        - name: Reload facts
-          setup:
+            - name: Setup python virtualenv
+              include_tasks: virtualenv.yml
+
+            - name: Reload facts
+              setup:
       vars:
         ansible_user: "{{ bootstrap_ansible_user }}"
         ansible_password: "{{ bootstrap_ansible_password }}"
@@ -21,6 +27,12 @@
         ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
         ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
         ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
-  when: bootstrap_enable
+        ansible_python_interpreter: >-
+          {{ bootstrap_ansible_python_interpreter
+             | default(
+                 (bootstrap_distribution_version is version("8", "<"))
+                 | ternary("/usr/bin/python",
+                           "/usr/bin/python3")) }}
+  when: bootstrap_enable | bool
   tags:
     - role::bootstrap
