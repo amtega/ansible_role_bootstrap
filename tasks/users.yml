@@ -10,8 +10,8 @@
         password: "{{ bootstrap_ansible_new_password }}"
       register: bootstrap_create_ansible_user_result
       when:
-        - bootstrap_provisone_ansible_user
-        - bootstrap_ansible_user_needs_update
+        - bootstrap_provisone_ansible_user | bool
+        - bootstrap_ansible_user_needs_update | bool
 
     - name: Setup ansible become user
       user:
@@ -21,9 +21,9 @@
         password: "{{ bootstrap_ansible_become_new_password }}"
       register: bootstrap_create_ansible_become_user_result
       when:
-        - bootstrap_provisone_ansible_become_user
-        - bootstrap_ansible_become_activated
-        - bootstrap_ansible_become_user_needs_update
+        - bootstrap_provisone_ansible_become_user | bool
+        - bootstrap_ansible_become_activated | bool
+        - bootstrap_ansible_become_user_needs_update | bool
   tags:
     - role::bootstrap
     - role::bootstrap::configure

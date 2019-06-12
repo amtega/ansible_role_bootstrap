@@ -33,6 +33,6 @@
                  (bootstrap_distribution_version is version("8", "<"))
                  | ternary("/usr/bin/python",
                            "/usr/bin/python3")) }}
-  when: bootstrap_enable
+  when: bootstrap_enable | bool
   tags:
     - role::bootstrap
