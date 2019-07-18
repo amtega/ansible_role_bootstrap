@@ -1,0 +1,12 @@
+---
+#  Tasks to setup ssh authorized keys
+
+- block:
+    - name: Setup SSH authorized keys
+      include_role:
+        name: amtega.authorized_keys
+  when:
+    - authorized_keys| length > 0
+  tags:
+    - role::bootstrap
+    - role::bootstrap::authorized_keys

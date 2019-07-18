@@ -12,7 +12,9 @@
     - name: Install minimum required packages
       package:
         name: "{{ item }}"
-        use: yum
+        use: >-
+          {{ (bootstrap_distribution_version is version("8", "<"))
+             | ternary("yum", "dnf") }}
         state: present
       loop: "{{ bootstrap_packages }}"
   tags:

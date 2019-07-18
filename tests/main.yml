@@ -8,14 +8,23 @@
       docker_presets_images_json_query: >-
         [? starts_with(name, `centos-6`)
            || starts_with(name, `centos-7`)
-           || starts_with(name, `fedora-27`)
-           || starts_with(name, `fedora-28`)
-           || starts_with(name, `fedora-29`)]
+           || starts_with(name, `fedora-29`)
+           || starts_with(name, `fedora-30`)]
 
     - role: amtega.docker_sandbox
       docker_sandbox_state: started
   tags:
     - sandbox
+
+- name: Prepare docker containers for test
+  hosts: docker_sandbox_containers
+  tasks:
+    - name: Save credentials
+      set_fact:
+        saved_ansible_user: >-
+          {{ hostvars[inventory_hostname].ansible_user }}
+        saved_ansible_password: >-
+          {{ hostvars[inventory_hostname].ansible_password }}
 
 - name: Test bootstrap role
   hosts: docker_sandbox_containers
@@ -29,13 +38,26 @@
       {{ hostvars[inventory_hostname].ansible_user }}
     ansible_become_pass: >-
       {{ hostvars[inventory_hostname].ansible_password }}
+    authorized_keys:
+      - comment: Test key pair
+        key: >-
+          {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
+             + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
+             + "OdcWxDVtYupOJr7+YSTnsQU8Gk2PzhC4uhzD+P0Tso7Gscr0+24IYhpRlrh5S"
+             + "oG71Z2drwTmMYgn8cfm+NdbbcpDRkJhL8DmSiDpdBW7amWZNSqsLOBO+et3MC"
+             + "N1N99k9Djts8HqZdWl4fK3j8oOT3OR301QeH6HStQWbMr7QjP14Um8QzKvxNi"
+             + "G4NK+1T9yzWmY0LkccJaH+5DIvbOwT3RsGreessowCSLvBNguSe9/jP4XJ6az"
+             + "x/xwvgIQMk3NjDj7HkrOyygcSeHWzv6KY/K1X8+LR/sKRIlCnOXVTL/UNBQ04"
+             + "qcsQ5IaObLX9BVAy6cdPNgdjMje0qH3f15u0m9AD/fqKMVHXVUqsyfEqgcZxN"
+             + "FVZP1COTiflh+PaIiIAbaoQf7a8/quiug/Nmb/UMEpkyT2NwYKBRl6Y90W3ck"
+             + "= user@acme.com" }}
+        user: root
+        state: present
   roles:
     - role: amtega.bootstrap
       bootstrap_enable: true
-      bootstrap_ansible_user: >-
-        {{ hostvars[inventory_hostname].ansible_user }}
-      bootstrap_ansible_password: >-
-        {{ hostvars[inventory_hostname].ansible_password }}
+      bootstrap_ansible_user: "{{ saved_ansible_user }}"
+      bootstrap_ansible_password: "{{ saved_ansible_password }}"
   tasks:
     - name: Test bootstrap_shadow_facts module with a list of users
       bootstrap_shadow_facts:

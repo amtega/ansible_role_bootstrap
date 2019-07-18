@@ -15,9 +15,8 @@ galaxy_info:
         - 7
     - name: Fedora
       versions:
-        - 27
-        - 28
         - 29
+        - 30
 
   galaxy_tags:
     - ansible
@@ -30,3 +29,7 @@ dependencies:
       proxy_client_permanent: no
     tags:
       - role::bootstrap
+
+  - role: amtega.authorized_keys
+    tags:
+      - never

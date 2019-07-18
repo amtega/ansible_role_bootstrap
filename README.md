@@ -2,6 +2,8 @@
 
 This is an [Ansible](http://www.ansible.com) role to bootstrap a host with the minimum requirements to run ansible installing python and adding ansible main and become user on the host. The role variables allows the specification of the authentication information necessary to acomplish the bootstrap.
 
+The role is integrated with `amtega.authorized_keys` role in order to bootstrap SSH key pairs. See [amtega.authorized_keys](https://galaxy.ansible.com/amtega/authorized_keys) documentation for details.
+
 ## Role Variables
 
 A list of all the default variables for this role is available in `defaults/main.yml`.
@@ -29,6 +31,10 @@ This is an example playbook:
   vars:
     bootstrap_ansible_user: root
     bootstrap_ansible_password: mypassword
+    authorized_keys:
+      - comment: Test key pair
+        key: "{{ lookup('file', '/root/id_rsa.pub') }}"
+        state: present
   roles:
     - amtega.bootstrap
 ```
