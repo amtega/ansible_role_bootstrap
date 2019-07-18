@@ -4,8 +4,6 @@
 - block:
     - name: Setup ansible connection facts
       include_tasks: facts.yml
-      vars:
-        ansible_python_interpreter: /usr/bin/python
 
     - block:
         - name: Setup python
@@ -14,6 +12,9 @@
         - block:
             - name: Setup ansible users
               include_tasks: users.yml
+
+            - name: Setup SSH authorized keys
+              include_tasks: authorized_keys.yml
 
             - name: Setup python virtualenv
               include_tasks: virtualenv.yml

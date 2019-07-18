@@ -12,17 +12,26 @@
         warn: no
       changed_when: no
       register: bootstrap_os_result
+      vars:
+        ansible_user: "{{ bootstrap_ansible_user }}"
+        ansible_password: "{{ bootstrap_ansible_password }}"
+        ansible_become: "{{ bootstrap_become | default(false) }}"
+        ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
 
     - name: Setup fact with operating system info
       set_fact:
         bootstrap_distribution_name: >-
           {{ bootstrap_os_result.stdout
-            | regex_replace(bootstrap_os_release_regex, "\1") }}
+             | trim
+             | regex_replace(bootstrap_os_release_regex, "\1") }}
         bootstrap_distribution_version: >-
           {{ bootstrap_os_result.stdout
-            | regex_replace(bootstrap_os_release_regex, "\2") }}
+             | trim
+             | regex_replace(bootstrap_os_release_regex, "\2") }}
       vars:
-        bootstrap_os_release_regex: "([a-zA-Z]+) .* release ([0-9.]+) .*"
+        bootstrap_os_release_regex: "([a-zA-Z ]+) release ([0-9.]+).*"
 
     - name: Setup fact with ansible users authentication information to update
       set_fact:
