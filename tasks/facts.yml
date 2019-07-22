@@ -4,7 +4,7 @@
 
 - block:
     - name: Gather operating system release
-      shell: >-
+      raw: >-
         cat /etc/centos-release \
         || cat /etc/rhel-release \
         || cat /etc/fedora-release
@@ -63,6 +63,12 @@
         ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
         ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
         ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
+        ansible_python_interpreter: >-
+          {{ bootstrap_ansible_python_interpreter
+             | default(
+                 (bootstrap_distribution_version is version("8", "<"))
+                 | ternary("/usr/bin/python",
+                           "/usr/bin/python3")) }}
 
     - name: Setup facts indicating if it is necesary to update ansible users
       set_fact:

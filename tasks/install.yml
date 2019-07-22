@@ -5,8 +5,8 @@
     - name: Install python
       script: files/install_python.sh
       register: bootstrap_install_python_result
-      changed_when: bootstrap_install_python_result.rc > 0
-      failed_when: bootstrap_install_python_result.rc < 0
+      changed_when: bootstrap_install_python_result.rc == 1
+      failed_when: bootstrap_install_python_result.rc == 2
       environment: "{{ proxy_client_environment }}"
 
     - name: Install minimum required packages
