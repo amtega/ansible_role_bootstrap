@@ -11,6 +11,7 @@
         {{ virtualenv }}
       args:
         creates: "{{ virtualenv }}"
+      register: bootstrap_setup_venv_result
       vars:
         virtualenv: "{{ bootstrap_python_virtualenv }}"
         virtualenv_command: >-
