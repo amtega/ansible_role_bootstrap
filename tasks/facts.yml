@@ -5,9 +5,9 @@
 - block:
     - name: Gather operating system release
       raw: >-
-        cat /etc/centos-release \
-        || cat /etc/rhel-release \
-        || cat /etc/fedora-release
+        cat /etc/centos-release 2> /dev/null \
+        || cat /etc/rhel-release 2> /dev/null \
+        || cat /etc/fedora-release 2> /dev/null
       args:
         warn: no
       changed_when: no
@@ -49,6 +49,7 @@
              | default('')
              | string
              | password_hash('sha512', 100000000000 | random | string) }}
+      no_log: "{{ bootstrap_no_log  | bool }}"
 
     - name: Get ansible users shadow password information
       bootstrap_shadow_facts:
@@ -66,18 +67,25 @@
         ansible_python_interpreter: >-
           {{ bootstrap_ansible_python_interpreter
              | default(
-                 (bootstrap_distribution_version is version("8", "<"))
+                 (bootstrap_distribution_version | string is version("8", "<"))
                  | ternary("/usr/bin/python",
                            "/usr/bin/python3")) }}
+      no_log: "{{ bootstrap_no_log  | bool }}"
 
-    - name: Setup facts indicating if it is necesary to update ansible users
+    - name: Setup facts indicating if ansible user must be updated
       set_fact:
         bootstrap_ansible_user_needs_update: >-
-          {{ not ansible_password
+          {{ not ansible_user in shadows.keys() | list
+             or not ansible_password
                  is bootstrap_shadow_match(shadows[ansible_user]) }}
+
+    - name: Setup facts indicating ansible become user must be updated
+      set_fact:
         bootstrap_ansible_become_user_needs_update: >-
-          {{ not ansible_become_pass
+          {{ not ansible_become_user in shadows.keys() | list
+             or not ansible_become_pass
                  is bootstrap_shadow_match(shadows[ansible_become_user]) }}
+                 
   vars:
     shadows: "{{ bootstrap_get_shadows_result.shadows }}"
   tags:
