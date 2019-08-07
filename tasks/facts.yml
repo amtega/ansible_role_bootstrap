@@ -75,16 +75,17 @@
     - name: Setup facts indicating if ansible user must be updated
       set_fact:
         bootstrap_ansible_user_needs_update: >-
-          {{ not ansible_password
+          {{ not ansible_user in shadows.keys() | list
+             or not ansible_password
                  is bootstrap_shadow_match(shadows[ansible_user]) }}
-      when: ansible_user in shadows.keys() | list
 
     - name: Setup facts indicating ansible become user must be updated
       set_fact:
         bootstrap_ansible_become_user_needs_update: >-
-          {{ not ansible_become_pass
+          {{ not ansible_become_user in shadows.keys() | list
+             or not ansible_become_pass
                  is bootstrap_shadow_match(shadows[ansible_become_user]) }}
-      when: ansible_become_user in shadows.keys() | list
+                 
   vars:
     shadows: "{{ bootstrap_get_shadows_result.shadows }}"
   tags:
