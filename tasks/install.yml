@@ -9,14 +9,23 @@
       failed_when: bootstrap_install_python_result.rc == 2
       environment: "{{ proxy_client_environment }}"
 
-    - name: Install minimum required packages
-      package:
-        name: "{{ item }}"
-        use: >-
+    - include_role:
+        name: amtega.epel
+      when: bootstrap_distribution_version is version("7", "<")
+
+    - include_role:
+        name: amtega.packages
+      vars:
+        virtualenv_package: >-
           {{ (bootstrap_distribution_version is version("8", "<"))
-             | ternary("yum", "dnf") }}
-        state: present
-      loop: "{{ bootstrap_packages }}"
+             | ternary("python-virtualenv", "python3-virtualenv") }}
+        packages_os:
+          all:
+            all:
+              - name: libselinux-python
+                state: present
+              - name: "{{ virtualenv_package }}"
+                state: present
   tags:
     - role::bootstrap
     - role::bootstrap::install
