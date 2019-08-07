@@ -12,6 +12,16 @@ bootstrap_enable: no
 bootstrap_provisone_ansible_user: yes
 bootstrap_provisone_ansible_become_user: yes
 
+# Deploy ssh authorized keys
+
+bootstrap_provisione_ssh_authorized_keys: yes
+
+# Ensure ansible user home directory exists. This is necessary if you want to
+# deploy ssh keys
+
+bootstrap_create_ansible_user_home: >-
+  {{ bootstrap_provisione_ssh_authorized_keys }}
+
 # Ansible users to use to bootstrap the server. Take note that this are not the
 # users you want to exist after bootstrapping. The final users that will
 # provisioned after the bootstrap process are the ones specified in the host
@@ -45,3 +55,7 @@ bootstrap_ansible_become_user_shell: /bin/bash
 # bootstrap_python_virtualenv_command:
 # bootstrap_python_virtualenv_python:
 # bootstrap_python_virtualenv_site_packages:
+
+# Hide sensitive information
+
+bootstrap_no_log: yes

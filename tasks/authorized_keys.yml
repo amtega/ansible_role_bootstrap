@@ -5,8 +5,9 @@
     - name: Setup SSH authorized keys
       include_role:
         name: amtega.authorized_keys
-  when:
-    - authorized_keys| length > 0
+      vars:
+        authorized_keys_no_log: "{{ bootstrap_no_log }}"
+  when: bootstrap_provisione_ssh_authorized_keys | bool
   tags:
     - role::bootstrap
     - role::bootstrap::authorized_keys

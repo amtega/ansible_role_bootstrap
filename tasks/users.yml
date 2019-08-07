@@ -2,28 +2,35 @@
 #  Tasks to setup users
 
 - block:
+    - name: Setup ansible user home directory
+      user:
+        name: "{{ bootstrap_ansible_user_to_update }}"
+        create_home: yes
+      when: bootstrap_create_ansible_user_home | bool
+
     - name: Setup ansible user
       user:
         name: "{{ bootstrap_ansible_user_to_update }}"
         shell: "{{ bootstrap_ansible_user_shell }}"
         group: "{{ bootstrap_ansible_user_group }}"
-        password: "{{ bootstrap_ansible_new_password }}"
+        password: >-
+          {{ (bootstrap_ansible_user_needs_update | default(false))
+             | ternary(bootstrap_ansible_new_password, omit) }}
       register: bootstrap_create_ansible_user_result
-      when:
-        - bootstrap_provisone_ansible_user | bool
-        - bootstrap_ansible_user_needs_update | bool
+      when: bootstrap_provisone_ansible_user | bool
 
     - name: Setup ansible become user
       user:
         name: "{{ bootstrap_ansible_become_user_to_update }}"
         shell: "{{ bootstrap_ansible_become_user_shell }}"
         group: "{{ bootstrap_ansible_become_user_group }}"
-        password: "{{ bootstrap_ansible_become_new_password }}"
+        password: >-
+          {{ (bootstrap_ansible_become_user_needs_update | default(false))
+             | ternary(bootstrap_ansible_become_new_password, omit) }}
       register: bootstrap_create_ansible_become_user_result
       when:
         - bootstrap_provisone_ansible_become_user | bool
         - bootstrap_ansible_become_activated | bool
-        - bootstrap_ansible_become_user_needs_update | bool
   tags:
     - role::bootstrap
     - role::bootstrap::configure
