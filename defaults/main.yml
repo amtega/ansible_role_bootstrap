@@ -22,19 +22,20 @@ bootstrap_provisione_ssh_authorized_keys: yes
 bootstrap_create_ansible_user_home: >-
   {{ bootstrap_provisione_ssh_authorized_keys }}
 
-# Ansible users to use to bootstrap the server. Take note that this are not the
-# users you want to exist after bootstrapping. The final users that will
-# provisioned after the bootstrap process are the ones specified in the host
-# inventory using ansible_user and ansible_become_user variables (with their
-# respective passwords). The users specified here only are used to bootstrap the
-# host.
+# Ansible connection settings to use when bootstrapping the server. Take note
+# that this are not the users you want to exist after bootstrapping. The final
+# users that will provisioned after the bootstrap process are the ones specified
+# in the host inventory using ansible_user and ansible_become_user variables
+# (with their respective passwords). The users specified here only are used to
+# bootstrap the host.
 
 bootstrap_ansible_user: root
-bootstrap_ansible_password: ''
+bootstrap_ansible_password: ""
 bootstrap_become: no
 bootstrap_become_method: su
 bootstrap_become_user: root
-bootstrap_become_pass: ''
+bootstrap_become_pass: ""
+bootstrap_ansible_ssh_common_args: ""
 
 # Group and shell of the ansible/become users to setup as part of the bootstrap
 # process.
