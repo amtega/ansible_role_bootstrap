@@ -38,11 +38,14 @@ bootstrap_become_pass: ""
 bootstrap_ansible_ssh_common_args: ""
 
 # Group and shell of the ansible/become users to setup as part of the bootstrap
-# process.
+# process. See ansible user module for details
 
 bootstrap_ansible_user_group: users
+bootstrap_ansible_user_groups:
+  - wheel
 bootstrap_ansible_user_shell: /bin/bash
 bootstrap_ansible_become_user_group: users
+bootstrap_ansible_become_user_groups: []
 bootstrap_ansible_become_user_shell: /bin/bash
 
 # Python interpreter to use by bootstrap
@@ -56,6 +59,10 @@ bootstrap_ansible_become_user_shell: /bin/bash
 # bootstrap_python_virtualenv_command:
 # bootstrap_python_virtualenv_python:
 # bootstrap_python_virtualenv_site_packages:
+
+# Reload facts at the end of the bootstrapping process
+
+bootstrap_reload_facts: yes
 
 # Hide sensitive information
 
