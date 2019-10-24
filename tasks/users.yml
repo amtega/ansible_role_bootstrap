@@ -13,6 +13,7 @@
         name: "{{ bootstrap_ansible_user_to_update }}"
         shell: "{{ bootstrap_ansible_user_shell }}"
         group: "{{ bootstrap_ansible_user_group }}"
+        groups: "{{ bootstrap_ansible_user_groups }}"
         password: >-
           {{ (bootstrap_ansible_user_needs_update | default(false))
              | ternary(bootstrap_ansible_new_password, omit) }}
@@ -24,6 +25,7 @@
         name: "{{ bootstrap_ansible_become_user_to_update }}"
         shell: "{{ bootstrap_ansible_become_user_shell }}"
         group: "{{ bootstrap_ansible_become_user_group }}"
+        groups: "{{ bootstrap_ansible_become_user_groups }}"
         password: >-
           {{ (bootstrap_ansible_become_user_needs_update | default(false))
              | ternary(bootstrap_ansible_become_new_password, omit) }}
