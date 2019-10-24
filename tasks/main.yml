@@ -21,9 +21,11 @@
 
             - name: Reload facts
               setup:
-              when: >-
-                bootstrap_install_python_result is changed
-                or bootstrap_setup_venv_result is changed
+              when:
+                - bootstrap_reload_facts | bool
+                - >-
+                  bootstrap_install_python_result is changed
+                  or bootstrap_setup_venv_result is changed
 
       vars:
         ansible_user: "{{ bootstrap_ansible_user }}"
