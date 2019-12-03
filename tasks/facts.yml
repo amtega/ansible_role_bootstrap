@@ -6,7 +6,7 @@
     - name: Gather operating system release
       raw: >-
         cat /etc/centos-release 2> /dev/null \
-        || cat /etc/rhel-release 2> /dev/null \
+        || cat /etc/redhat-release 2> /dev/null \
         || cat /etc/fedora-release 2> /dev/null
       args:
         warn: no
