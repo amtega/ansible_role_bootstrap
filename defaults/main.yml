@@ -6,6 +6,15 @@
 
 bootstrap_enable: no
 
+# Number of seconds since last run to bootstrap again the host. If the value is
+# set to 0 bootstraping will be done each time the role is run (and
+# bootstrap_enable is set to yes).
+#
+# If value is > 0 bootstrapping only will be done if the number of seconds since
+# last bootstrap is greather thant the value indicated
+
+bootstrap_seconds_to_run: 0
+
 # Indicate if the bootstrap process must provisione local users for
 # ansible_user and ansible_become_user specified in the host inventory.
 
