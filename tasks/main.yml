@@ -2,7 +2,22 @@
 # Bootstrap the server to use ansible
 
 - block:
-    - name: Setup ansible connection facts
+    - name: Gather facts
+      setup:
+      when: not ansible_local.bootstrap.date is defined
+  vars:
+    ansible_user: "{{ bootstrap_ansible_user }}"
+    ansible_password: "{{ bootstrap_ansible_password }}"
+    ansible_become: "{{ bootstrap_become | default(false) }}"
+    ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
+    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+    ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
+    ansible_ssh_common_args: "{{ bootstrap_ansible_ssh_common_args }}"
+  tags:
+    - role::bootstrap
+
+- block:
+    - name: Gather ansible connection facts
       include_tasks: facts.yml
 
     - block:
@@ -27,6 +42,9 @@
                   bootstrap_install_python_result is changed
                   or bootstrap_setup_venv_result is changed
 
+            - name: Setup local fact
+              include_tasks: local_fact.yml
+
       vars:
         ansible_user: "{{ bootstrap_ansible_user }}"
         ansible_password: "{{ bootstrap_ansible_password }}"
@@ -41,6 +59,21 @@
                  (bootstrap_distribution_version is version("8", "<"))
                  | ternary("/usr/bin/python",
                            "/usr/bin/python3")) }}
-  when: bootstrap_enable | bool
+  when: bootstrap_enable | bool and bootstrap_require_run
+  vars:
+    bootstrap_current_date: >-
+      {{ "%Y-%m-%d %H:%M:%S" | strftime | to_datetime }}
+
+    bootstrap_last_date: >-
+      {{ ansible_local.bootstrap.date | to_datetime }}
+
+    bootstrap_seconds_since_last: >-
+      (bootstrap_current_date - bootstrap_last_date).total_seconds()
+
+    bootstrap_require_run: >-
+      {{ (bootstrap_seconds_to_run | int > 0)
+         | ternary(bootstrap_seconds_since_last | int
+                   > bootstrap_seconds_to_run | int,
+                   true) }}
   tags:
     - role::bootstrap

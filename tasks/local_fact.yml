@@ -1,0 +1,17 @@
+---
+# Setup local fact
+
+- block:
+    - name: Setup local facts directory
+      file:
+        path: /etc/ansible/facts.d
+        state: directory
+
+    - name: Setup local fact
+      template:
+        src: bootstrap.fact.j2
+        dest: /etc/ansible/facts.d/bootstrap.fact
+        mode: 0640
+  tags:
+    - role::bootstrap
+    - role::bootstrap::local_fact
