@@ -41,6 +41,7 @@ provisioner:
         bootstrap_become: yes
         bootstrap_become_user: root
         bootstrap_become_pass: vagrant
+        bootstrap_seconds_to_run: 300
         key: >-
           {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
              + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
