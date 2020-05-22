@@ -1,0 +1,25 @@
+---
+
+- name: Prepare testing environment python
+  hosts: molecule_hosts_centos
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Setup packages
+      raw: yum install -y libselinux-python
+
+- name: Prepare testing environment ssh service
+  hosts: molecule_hosts
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Allow interactive password ssh authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication no'
+        line: PasswordAuthentication yes
+
+    - name: Restart sshd service
+      service:
+        name: sshd
+        state: restarted

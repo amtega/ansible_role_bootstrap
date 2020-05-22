@@ -1,0 +1,70 @@
+---
+
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+platforms:
+  - name: centos6
+    box: centos/6
+    groups:
+      - molecule_hosts
+      - molecule_hosts_centos
+  - name: centos7
+    box: centos/6
+    groups:
+      - molecule_hosts
+      - molecule_hosts_centos
+  - name: fedora29
+    box: fedora/29-cloud-base
+    memory: 1024
+    groups:
+      - molecule_hosts
+      - molecule_hosts_fedora
+  - name: fedora30
+    box: fedora/30-cloud-base
+    memory: 1024
+    groups:
+      - molecule_hosts
+      - molecule_hosts_fedora
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      molecule_hosts:
+        bootstrap_ansible_user: vagrant
+        bootstrap_ansible_password: vagrant
+        bootstrap_become: yes
+        bootstrap_become_user: root
+        bootstrap_become_pass: vagrant
+        key: >-
+          {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
+             + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
+             + "OdcWxDVtYupOJr7+YSTnsQU8Gk2PzhC4uhzD+P0Tso7Gscr0+24IYhpRlrh5S"
+             + "oG71Z2drwTmMYgn8cfm+NdbbcpDRkJhL8DmSiDpdBW7amWZNSqsLOBO+et3MC"
+             + "N1N99k9Djts8HqZdWl4fK3j8oOT3OR301QeH6HStQWbMr7QjP14Um8QzKvxNi"
+             + "G4NK+1T9yzWmY0LkccJaH+5DIvbOwT3RsGreessowCSLvBNguSe9/jP4XJ6az"
+             + "x/xwvgIQMk3NjDj7HkrOyygcSeHWzv6KY/K1X8+LR/sKRIlCnOXVTL/UNBQ04"
+             + "qcsQ5IaObLX9BVAy6cdPNgdjMje0qH3f15u0m9AD/fqKMVHXVUqsyfEqgcZxN"
+             + "FVZP1COTiflh+PaIiIAbaoQf7a8/quiug/Nmb/UMEpkyT2NwYKBRl6Y90W3ck"
+             + "= user@acme.com" }}
+        authorized_keys:
+          - comment: Test key pair
+            key: "{{ key }}"
+            user: root
+            state: present
+      molecule_hosts_centos:
+        bootstrap_become_method: su
+      molecule_hosts_fedora:
+        ansible_python_interpreter: /usr/bin/python3
+        bootstrap_become_method: sudo
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
