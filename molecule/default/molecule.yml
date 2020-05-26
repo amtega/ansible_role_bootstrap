@@ -15,7 +15,7 @@ platforms:
       - molecule_hosts
       - molecule_hosts_centos
   - name: centos7
-    box: centos/6
+    box: centos/7
     groups:
       - molecule_hosts
       - molecule_hosts_centos
