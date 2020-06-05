@@ -61,19 +61,22 @@
                            "/usr/bin/python3")) }}
   when: bootstrap_enable | bool and bootstrap_require_run
   vars:
-    bootstrap_current_date: >-
-      {{ "%Y-%m-%d %H:%M:%S" | strftime | to_datetime }}
+    bootstrap_current_date: "{{ '%Y-%m-%d %H:%M:%S' | strftime }}"
 
     bootstrap_last_date: >-
-      {{ ansible_local.bootstrap.date | to_datetime }}
+      {{ ansible_local.bootstrap.date
+         | default(bootstrap_current_date) }}
 
     bootstrap_seconds_since_last: >-
-      (bootstrap_current_date - bootstrap_last_date).total_seconds()
+      {{ (bootstrap_current_date | to_datetime
+          - bootstrap_last_date | to_datetime)
+         .total_seconds() }}
 
     bootstrap_require_run: >-
       {{ (bootstrap_seconds_to_run | int > 0)
          | ternary(bootstrap_seconds_since_last | int
-                   > bootstrap_seconds_to_run | int,
+                   > bootstrap_seconds_to_run | int
+                   or bootstrap_seconds_since_last | int == 0,
                    true) }}
   tags:
     - role::bootstrap
