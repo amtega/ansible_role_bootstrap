@@ -1,0 +1,27 @@
+---
+
+- name: Verify
+  hosts: molecule_hosts
+  gather_facts: no
+  tasks:
+    - name: Get ansible user
+      getent:
+        database: passwd
+        key: "{{ ansible_user }}"
+      register: get_ansible_user_result
+
+    - name: Get ansible become user
+      getent:
+        database: passwd
+        key: "{{ ansible_become_user }}"
+      register: get_ansible_become_user_result
+
+    - name: Verify ansible users
+      assert:
+        that:
+          - >-
+            ansible_user
+              in get_ansible_user_result.ansible_facts.getent_passwd
+          - >-
+            ansible_become_user
+              in get_ansible_become_user_result.ansible_facts.getent_passwd

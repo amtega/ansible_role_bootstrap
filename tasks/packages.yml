@@ -1,0 +1,16 @@
+---
+#  Tasks to setup packages
+
+- include_role:
+    name: amtega.packages
+  vars:
+    virtualenv_package: >-
+      {{ (bootstrap_distribution_version is version("8", "<"))
+         | ternary("python-virtualenv", "python3-virtualenv") }}
+    packages_os:
+      all:
+        all:
+          - name: libselinux-python
+            state: present
+          - name: "{{ virtualenv_package }}"
+            state: present
