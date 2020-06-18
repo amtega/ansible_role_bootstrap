@@ -1,31 +1,11 @@
 ---
-#  Tasks to setup python
+# Role install tasks
 
 - block:
-    - name: Install python
-      script: files/install_python.sh
-      register: bootstrap_install_python_result
-      changed_when: bootstrap_install_python_result.rc == 1
-      failed_when: bootstrap_install_python_result.rc == 2
-      environment: "{{ proxy_client_environment }}"
-
-    - include_role:
-        name: amtega.epel
-      when: bootstrap_distribution_version is version("7", "<")
-
-    - include_role:
-        name: amtega.packages
-      vars:
-        virtualenv_package: >-
-          {{ (bootstrap_distribution_version is version("8", "<"))
-             | ternary("python-virtualenv", "python3-virtualenv") }}
-        packages_os:
-          all:
-            all:
-              - name: libselinux-python
-                state: present
-              - name: "{{ virtualenv_package }}"
-                state: present
+    - include_tasks: proxy_client.yml
+    - include_tasks: python.yml
+    - include_tasks: epel.yml
+    - include_tasks: packages.yml
   tags:
     - role::bootstrap
     - role::bootstrap::install

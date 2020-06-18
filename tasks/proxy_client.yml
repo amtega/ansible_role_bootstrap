@@ -1,0 +1,7 @@
+---
+#  Tasks to setup proxy client
+
+- include_role:
+    name: amtega.proxy_client
+  vars:
+    proxy_client_permanent: no

@@ -6,26 +6,46 @@ driver:
   name: vagrant
   provider:
     name: virtualbox
-lint:
-  name: yamllint
+lint: |
+  set -e
+  export ANSIBLE_ACTION_PLUGINS=$PWD/action_plugins
+  export ANSIBLE_BECOME_PLUGINS=$PWD/become_plugins
+  export ANSIBLE_CACHE_PLUGINS=$PWD/cache_plugins
+  export ANSIBLE_CALLBACK_PLUGINS=$PWD/callback_plugins
+  export ANSIBLE_CLICONF_PLUGINS=$PWD/cliconf_plugins
+  export ANSIBLE_CONNECTION_PLUGINS=$PWD/connection_plugins
+  export ANSIBLE_DOC_FRAGMENT_PLUGINS=$PWD/doc_fragment_plugins
+  export ANSIBLE_FILTER_PLUGINS=$PWD/filter_plugins
+  export ANSIBLE_HTTPAPI_PLUGINS=$PWD/httpapi_plugins
+  export ANSIBLE_INVENTORY_PLUGINS=$PWD/inventory_plugins
+  export ANSIBLE_LIBRARY=$PWD/library
+  export ANSIBLE_LOOKUP_PLUGINS=$PWD/lookup_plugins
+  export ANSIBLE_NETCONF_PLUGINS=$PWD/netconf_plugins
+  export ANSIBLE_STRATEGY_PLUGINS=$PWD/strategy_plugins
+  export ANSIBLE_TERMINAL_PLUGINS=$PWD/terminal_plugins
+  export ANSIBLE_TEST_PLUGINS=$PWD/test_plugins
+  export ANSIBLE_VARS_PLUGINS=$PWD/vars_plugins
+  yamllint .
+  ansible-lint
+  flake8
 platforms:
-  - name: centos6
+  - name: "centos6-${INSTANCE_UUID:-1}"
     box: centos/6
     groups:
       - molecule_hosts
       - molecule_hosts_centos
-  - name: centos7
+  - name: "centos7-${INSTANCE_UUID:-1}"
     box: centos/7
     groups:
       - molecule_hosts
       - molecule_hosts_centos
-  - name: fedora29
+  - name: "fedora29-${INSTANCE_UUID:-1}"
     box: fedora/29-cloud-base
     memory: 1024
     groups:
       - molecule_hosts
       - molecule_hosts_fedora
-  - name: fedora30
+  - name: "fedora30-${INSTANCE_UUID:-1}"
     box: fedora/30-cloud-base
     memory: 1024
     groups:
@@ -34,38 +54,45 @@ platforms:
 provisioner:
   name: ansible
   inventory:
-    group_vars:
+    hosts:
       molecule_hosts:
-        bootstrap_ansible_user: vagrant
-        bootstrap_ansible_password: vagrant
-        bootstrap_become: yes
-        bootstrap_become_user: root
-        bootstrap_become_pass: vagrant
-        bootstrap_seconds_to_run: 300
-        key: >-
-          {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
-             + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
-             + "OdcWxDVtYupOJr7+YSTnsQU8Gk2PzhC4uhzD+P0Tso7Gscr0+24IYhpRlrh5S"
-             + "oG71Z2drwTmMYgn8cfm+NdbbcpDRkJhL8DmSiDpdBW7amWZNSqsLOBO+et3MC"
-             + "N1N99k9Djts8HqZdWl4fK3j8oOT3OR301QeH6HStQWbMr7QjP14Um8QzKvxNi"
-             + "G4NK+1T9yzWmY0LkccJaH+5DIvbOwT3RsGreessowCSLvBNguSe9/jP4XJ6az"
-             + "x/xwvgIQMk3NjDj7HkrOyygcSeHWzv6KY/K1X8+LR/sKRIlCnOXVTL/UNBQ04"
-             + "qcsQ5IaObLX9BVAy6cdPNgdjMje0qH3f15u0m9AD/fqKMVHXVUqsyfEqgcZxN"
-             + "FVZP1COTiflh+PaIiIAbaoQf7a8/quiug/Nmb/UMEpkyT2NwYKBRl6Y90W3ck"
-             + "= user@acme.com" }}
-        authorized_keys:
-          - comment: Test key pair
-            key: "{{ key }}"
-            user: root
-            state: present
+        vars:
+          ansible_user: vagrant
+          ansible_password: vagrant
+          ansible_become: yes
+          ansible_become_user: root
+          ansible_become_pass: vagrant
+          bootstrap_enable: yes
+          bootstrap_ansible_user: vagrant
+          bootstrap_ansible_password: vagrant
+          bootstrap_become: yes
+          bootstrap_become_user: root
+          bootstrap_become_pass: vagrant
+          bootstrap_seconds_to_run: 300
+          key: >-
+            {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
+               + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
+               + "OdcWxDVtYupOJr7+YSTnsQU8Gk2PzhC4uhzD+P0Tso7Gscr0+24IYhpRlrh5S"
+               + "oG71Z2drwTmMYgn8cfm+NdbbcpDRkJhL8DmSiDpdBW7amWZNSqsLOBO+et3MC"
+               + "N1N99k9Djts8HqZdWl4fK3j8oOT3OR301QeH6HStQWbMr7QjP14Um8QzKvxNi"
+               + "G4NK+1T9yzWmY0LkccJaH+5DIvbOwT3RsGreessowCSLvBNguSe9/jP4XJ6az"
+               + "x/xwvgIQMk3NjDj7HkrOyygcSeHWzv6KY/K1X8+LR/sKRIlCnOXVTL/UNBQ04"
+               + "qcsQ5IaObLX9BVAy6cdPNgdjMje0qH3f15u0m9AD/fqKMVHXVUqsyfEqgcZxN"
+               + "FVZP1COTiflh+PaIiIAbaoQf7a8/quiug/Nmb/UMEpkyT2NwYKBRl6Y90W3ck"
+               + "= user@acme.com" }}
+          authorized_keys:
+            - comment: Test key pair
+              key: "{{ key }}"
+              user: root
+              state: present
       molecule_hosts_centos:
-        bootstrap_become_method: su
+        vars:
+          ansible_become_method: su
+          bootstrap_become_method: su
       molecule_hosts_fedora:
-        ansible_python_interpreter: /usr/bin/python3
-        bootstrap_become_method: sudo
-  lint:
-    name: ansible-lint
+        vars:
+          ansible_become_method: sudo
+          ansible_python_interpreter: /usr/bin/python3
+          bootstrap_become_method: sudo
 verifier:
-  name: testinfra
-  lint:
-    name: flake8
+  name: ansible

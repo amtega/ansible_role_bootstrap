@@ -1,0 +1,6 @@
+---
+#  Tasks to setup EPEL
+
+- include_role:
+    name: amtega.epel
+  when: bootstrap_distribution_version is version("7", "<")
