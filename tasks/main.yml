@@ -4,7 +4,18 @@
 - block:
     - name: Gather facts
       setup:
-      when: not ansible_local.bootstrap.date is defined
+      vars:
+        ansible_python_interpreter: >-
+          {{ bootstrap_ansible_python_interpreter
+             | default("/usr/bin/python") }}
+  rescue:
+    - name: Gather facts
+      setup:
+      vars:
+        ansible_python_interpreter: >-
+          {{ bootstrap_ansible_python_interpreter
+             | default("/usr/bin/python3") }}
+  when: not ansible_local.bootstrap.date is defined
   vars:
     ansible_user: "{{ bootstrap_ansible_user }}"
     ansible_password: "{{ bootstrap_ansible_password }}"
