@@ -6,7 +6,16 @@
       user:
         name: "{{ bootstrap_ansible_user_to_update }}"
         create_home: yes
+      register: bootstrap_ansible_user_home_result
       when: bootstrap_create_ansible_user_home | bool
+
+    - name: Setup ansible user home directory parent dir
+      file:
+        path: "{{ bootstrap_ansible_user_home_result.home | dirname }}"
+        owner: "{{ bootstrap_home_parent_dir_owner }}"
+        group: "{{ bootstrap_home_parent_dir_group }}"
+        mode: "{{ bootstrap_home_parent_dir_mode }}"
+      when: bootstrap_ansible_user_home_result is changed
 
     - name: Setup ansible user
       user:

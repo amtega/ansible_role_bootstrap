@@ -73,6 +73,14 @@ bootstrap_ansible_become_user_shell: /bin/bash
 
 bootstrap_reload_facts: yes
 
+# Home parent dir owner, group and mode. Sometimes the role needs to create
+# the home dir. Theses settings control the attributes of the home folder parent
+# dir
+
+bootstrap_home_parent_dir_owner: root
+bootstrap_home_parent_dir_group: root
+bootstrap_home_parent_dir_mode: "0711"
+
 # Hide sensitive information
 
 bootstrap_no_log: yes
