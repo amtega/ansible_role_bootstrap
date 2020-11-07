@@ -1,0 +1,17 @@
+---
+# Gather ansible facts
+
+- block:
+    - name: Gather facts
+      setup:
+      vars:
+        ansible_python_interpreter: >-
+          {{ bootstrap_ansible_python_interpreter
+             | default("/usr/bin/python") }}
+  rescue:
+    - name: Gather facts
+      setup:
+      vars:
+        ansible_python_interpreter: >-
+          {{ bootstrap_ansible_python_interpreter
+             | default("/usr/bin/python3") }}

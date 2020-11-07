@@ -7,10 +7,42 @@
     virtualenv_package: >-
       {{ (bootstrap_distribution_version is version("8", "<"))
          | ternary("python-virtualenv", "python3-virtualenv") }}
+
+    packages_load_from_hostvars: no
     packages_os:
-      all:
+      fedora:
         all:
           - name: libselinux-python
             state: present
           - name: "{{ virtualenv_package }}"
             state: present
+
+      centos:
+        all:
+          - name: "{{ virtualenv_package }}"
+            state: present
+        6:
+          - name: libselinux-python
+            state: present
+        7:
+          - name: libselinux-python
+            state: present
+        8:
+          - name: python3-libselinux
+            state: present
+
+      redhat:
+        all:
+          - name: "{{ virtualenv_package }}"
+            state: present
+        6:
+          - name: libselinux-python
+            state: present
+        7:
+          - name: libselinux-python
+            state: present
+        8:
+          - name: python3-libselinux
+            state: present
+
+    packages_python: {}

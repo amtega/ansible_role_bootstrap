@@ -2,19 +2,9 @@
 # Bootstrap the server to use ansible
 
 - block:
-    - name: Gather facts
-      setup:
-      vars:
-        ansible_python_interpreter: >-
-          {{ bootstrap_ansible_python_interpreter
-             | default("/usr/bin/python") }}
+    - include_tasks: ansible_facts.yml
   rescue:
-    - name: Gather facts
-      setup:
-      vars:
-        ansible_python_interpreter: >-
-          {{ bootstrap_ansible_python_interpreter
-             | default("/usr/bin/python3") }}
+    - meta: noop
   when: not ansible_local.bootstrap.date is defined
   vars:
     ansible_user: "{{ bootstrap_ansible_user }}"
