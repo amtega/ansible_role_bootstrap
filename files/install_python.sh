@@ -1,8 +1,7 @@
 #!/bin/bash
 
 if [ -f /usr/bin/dnf ]; then
-  rpm -q python3
-  if [ $? != 0 ]; then
+  if [ ! -f /usr/bin/python3 ]; then
     output=$(export LANGUAGE=en_US && dnf install -y python3)
     echo $output | grep -q "Complete!"
     if [ $? == 0 ]; then
