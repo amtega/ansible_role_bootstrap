@@ -28,6 +28,7 @@
              | ternary(bootstrap_ansible_new_password, omit) }}
       register: bootstrap_create_ansible_user_result
       when: bootstrap_provisone_ansible_user | bool
+      no_log: yes
 
     - name: Setup ansible become user
       user:
@@ -42,6 +43,7 @@
       when:
         - bootstrap_provisone_ansible_become_user | bool
         - bootstrap_ansible_become_activated | bool
+      no_log: yes
   tags:
     - role::bootstrap
     - role::bootstrap::configure

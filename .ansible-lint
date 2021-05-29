@@ -2,8 +2,3 @@
 
 exclude_paths:
   - meta
-  - tasks/authorized_keys.yml
-  - tasks/epel.yml
-  - tasks/packages.yml
-  - tasks/proxy_client.yml
-  - tasks/python.yml

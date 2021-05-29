@@ -1,15 +1,6 @@
 ---
 
-- name: Prepare testing environment python
-  hosts: molecule_hosts_centos
-  become: yes
-  gather_facts: no
-  tasks:
-    - name: Setup packages
-      raw: yum install -y libselinux-python
-      when: yes
-
-- name: Prepare testing environment ssh service
+- name: Prepare
   hosts: molecule_hosts
   become: yes
   gather_facts: no

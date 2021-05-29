@@ -16,10 +16,7 @@
         virtualenv: "{{ bootstrap_python_virtualenv }}"
         virtualenv_command: >-
           {{ bootstrap_python_virtualenv_command
-             | default(
-                 (bootstrap_distribution_version is version("8", "<"))
-                 | ternary("/usr/bin/virtualenv",
-                           "/usr/bin/virtualenv-3")) }}
+             | default("/usr/bin/virtualenv") }}
         virtualenv_site_packages: >-
           {{ bootstrap_python_virtualenv_site_packages
              | default(none) }}
