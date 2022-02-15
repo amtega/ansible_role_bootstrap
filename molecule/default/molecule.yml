@@ -21,19 +21,19 @@ platforms:
       - molecule_hosts_centos
       - molecule_hosts_centos_7
   - name: "centos8-${INSTANCE_UUID:-1}"
-    box: centos/8
+    box: centos/stream8
     groups:
       - molecule_hosts
       - molecule_hosts_centos
       - molecule_hosts_centos_8
-  - name: "fedora33-${INSTANCE_UUID:-1}"
-    box: fedora/33-cloud-base
+  - name: "fedora34-${INSTANCE_UUID:-1}"
+    box: fedora/34-cloud-base
     memory: 1024
     groups:
       - molecule_hosts
       - molecule_hosts_fedora
-  - name: "fedora34-${INSTANCE_UUID:-1}"
-    box: fedora/34-cloud-base
+  - name: "fedora35-${INSTANCE_UUID:-1}"
+    box: fedora/35-cloud-base
     memory: 1024
     groups:
       - molecule_hosts
@@ -78,6 +78,10 @@ provisioner:
         vars:
           ansible_become_method: su
           bootstrap_become_method: su
+          ansible_python_interpreter: /usr/bin/python
+      molecule_hosts_centos_8:
+        vars:
+          ansible_python_interpreter: /usr/bin/python3
       molecule_hosts_fedora:
         vars:
           ansible_become_method: sudo
