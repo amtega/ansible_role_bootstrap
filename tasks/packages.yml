@@ -4,45 +4,33 @@
 - name: Setup packages
   include_role:
     name: amtega.packages
-  vars:
-    virtualenv_package: >-
-      {{ (bootstrap_distribution_version is version("8", "<"))
-         | ternary("python-virtualenv", "python3-virtualenv") }}
-
+  vars:    
     packages_load_from_hostvars: no
     packages_os:
       fedora:
         all:
           - name: libselinux-python3
             state: present
-          - name: "{{ virtualenv_package }}"
+
+          - name: python3-virtualenv
+            state: present
+      all:
+        6:
+          - name: python-virtualenv
             state: present
 
-      centos:
-        all:
-          - name: "{{ virtualenv_package }}"
-            state: present
-        6:
           - name: libselinux-python
             state: present
         7:
-          - name: libselinux-python
-            state: present
-        8:
-          - name: python3-libselinux
+          - name: python-virtualenv
             state: present
 
-      redhat:
-        all:
-          - name: "{{ virtualenv_package }}"
-            state: present
-        6:
-          - name: libselinux-python
-            state: present
-        7:
           - name: libselinux-python
             state: present
         8:
+          - name: python3-virtualenv
+            state: present
+
           - name: python3-libselinux
             state: present
 
