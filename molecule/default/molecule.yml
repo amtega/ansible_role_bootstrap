@@ -58,6 +58,24 @@ provisioner:
           bootstrap_become_pass: vagrant
           bootstrap_seconds_to_run: 300
           bootstrap_no_log: no
+
+          bootstrap_groups:
+            - name: test
+              state: present
+
+          bootstrap_users:
+            - name: testuser1
+              password: testpass
+              state: present
+              groups:
+                - test
+
+            - name: testuser2
+              password: testpass
+              state: present
+              groups:
+                - test
+
           key: >-
             {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
                + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
@@ -69,7 +87,8 @@ provisioner:
                + "qcsQ5IaObLX9BVAy6cdPNgdjMje0qH3f15u0m9AD/fqKMVHXVUqsyfEqgcZxN"
                + "FVZP1COTiflh+PaIiIAbaoQf7a8/quiug/Nmb/UMEpkyT2NwYKBRl6Y90W3ck"
                + "= user@acme.com" }}
-          authorized_keys:
+
+          bootstrap_authorized_keys:
             - comment: Test key pair
               key: "{{ key }}"
               user: root
