@@ -6,21 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.10.0] - 2022-05-23
+## [1.9.0] - 2022-05-23
 ### Added
 - Added new variables to indicate keys, users and groups to bootstrap. Related to ansible/playbooks/linux#88
 
 ### Changed
 - Changed bootstrap_create_ansible_user_home default value. Related to ansible/playbooks/linux#88
+- Supported distros. Related to ansible/main#263
 
-## [1.9.2] - 2022-02-22
-### Fixed
-- Adapted for CentOS derived distros. Related to ansible/main#263
-
-## [1.9.1] - 2022-02-15
 ### Fixed
 - Fixed tests.
-
-## [1.9.0] - 2022-02-15
-### Changed
-- Supported distros. Related to ansible/main#263
+- Adapted for CentOS derived distros. Related to ansible/main#263
