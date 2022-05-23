@@ -21,15 +21,9 @@ bootstrap_seconds_to_run: 0
 bootstrap_provisone_ansible_user: yes
 bootstrap_provisone_ansible_become_user: yes
 
-# Deploy ssh authorized keys
+# Ensure ansible user home directory exists.
 
-bootstrap_provisione_ssh_authorized_keys: yes
-
-# Ensure ansible user home directory exists. This is necessary if you want to
-# deploy ssh keys
-
-bootstrap_create_ansible_user_home: >-
-  {{ bootstrap_provisione_ssh_authorized_keys }}
+bootstrap_create_ansible_user_home: yes
 
 # Ansible connection settings to use when bootstrapping the server. Take note
 # that this are not the users you want to exist after bootstrapping. The final
@@ -80,6 +74,17 @@ bootstrap_reload_facts: yes
 bootstrap_home_parent_dir_owner: root
 bootstrap_home_parent_dir_group: root
 bootstrap_home_parent_dir_mode: "0711"
+
+# List of dict with ssh authorized keys to setup. See amtega.authorized_keys for
+# details
+
+bootstrap_authorized_keys: []
+
+# List of dicts with the groups/user to bootstrap using amtega.groups and
+# amtega.users roles. See those roles for details.
+
+bootstrap_groups: []
+bootstrap_users: []
 
 # Hide sensitive information
 

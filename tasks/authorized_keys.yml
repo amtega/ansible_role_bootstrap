@@ -6,8 +6,10 @@
       include_role:
         name: amtega.authorized_keys
       vars:
+        authorized_keys_load_from_hostvars: no
+        authorized_keys: "{{ bootstrap_authorized_keys }}"
         authorized_keys_no_log: "{{ bootstrap_no_log | bool }}"
-  when: bootstrap_provisione_ssh_authorized_keys | bool
+  when: bootstrap_authorized_keys | length > 0
   tags:
     - role::bootstrap
     - role::bootstrap::authorized_keys
