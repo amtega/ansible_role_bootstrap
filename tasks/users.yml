@@ -7,7 +7,9 @@
         name: "{{ bootstrap_ansible_user_to_update }}"
         create_home: yes
       register: bootstrap_ansible_user_home_result
-      when: bootstrap_create_ansible_user_home | bool
+      when:
+        - bootstrap_provisone_ansible_user
+        - bootstrap_create_ansible_user_home | bool
 
     - name: Setup ansible user home directory parent dir
       file:
@@ -44,6 +46,24 @@
         - bootstrap_provisone_ansible_become_user | bool
         - bootstrap_ansible_become_activated | bool
       no_log: yes
+
+    - name: Setup groups
+      include_role:
+        name: amtega.groups
+      when: bootstrap_groups | length > 0
+      vars:
+        groups_load_from_hostvars: no
+        groups_list: "{{ bootstrap_groups }}"
+        groups_no_log: "{{ bootstrap_no_log | bool }}"
+
+    - name: Setup users
+      include_role:
+        name: amtega.users
+      when: bootstrap_users | length > 0
+      vars:
+        users_load_from_hostvars: no
+        users: "{{ bootstrap_users }}"
+        users_no_log: "{{ bootstrap_no_log | bool }}"
   tags:
     - role::bootstrap
     - role::bootstrap::configure
