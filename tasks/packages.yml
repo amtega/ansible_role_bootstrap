@@ -2,7 +2,7 @@
 #  Tasks to setup packages
 
 - name: Setup packages
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.packages
   vars:    
     packages_load_from_hostvars: no

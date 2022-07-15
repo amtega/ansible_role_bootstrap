@@ -5,19 +5,19 @@
   gather_facts: no
   tasks:
     - name: Get ansible user
-      getent:
+      ansible.builtin.getent:
         database: passwd
         key: "{{ ansible_user }}"
       register: get_ansible_user_result
 
     - name: Get ansible become user
-      getent:
+      ansible.builtin.getent:
         database: passwd
         key: "{{ ansible_become_user }}"
       register: get_ansible_become_user_result
 
     - name: Verify ansible users
-      assert:
+      ansible.builtin.assert:
         that:
           - >-
             ansible_user

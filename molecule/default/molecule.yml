@@ -45,14 +45,14 @@ provisioner:
       molecule_hosts:
         vars:
           ansible_user: vagrant
-          ansible_password: vagrant
+          ansible_password: vagrant  # pragma: allowlist secret
           ansible_become: yes
           ansible_become_user: root
           ansible_become_pass: vagrant
           ansible_become_method: su
           bootstrap_enable: yes
           bootstrap_ansible_user: vagrant
-          bootstrap_ansible_password: vagrant
+          bootstrap_ansible_password: vagrant  # pragma: allowlist secret
           bootstrap_become: yes
           bootstrap_become_user: root
           bootstrap_become_pass: vagrant
@@ -65,18 +65,18 @@ provisioner:
 
           bootstrap_users:
             - name: testuser1
-              password: testpass
+              password: testpass  # pragma: allowlist secret
               state: present
               groups:
                 - test
 
             - name: testuser2
-              password: testpass
+              password: testpass  # pragma: allowlist secret
               state: present
               groups:
                 - test
 
-          key: >-
+          key: >-  # pragma: allowlist secret
             {{ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm9jwJbWL+UVufW9g7BgaaFE/"
                + "oNFNE70zmkIbuINauyxWwjzKcipjn6jmr4DU3XJMNusd1xJFB8BAE40C5m+eq"
                + "OdcWxDVtYupOJr7+YSTnsQU8Gk2PzhC4uhzD+P0Tso7Gscr0+24IYhpRlrh5S"
