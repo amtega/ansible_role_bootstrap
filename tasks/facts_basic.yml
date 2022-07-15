@@ -1,10 +1,9 @@
 ---
 
-# Setup ansible connection facts
-
-- block:
+- name: Gather basic facts
+  block:
     - name: Gather operating system release
-      raw: >-
+      ansible.builtin.raw: >-
         cat /etc/centos-release 2> /dev/null \
         || cat /etc/redhat-release 2> /dev/null \
         || cat /etc/fedora-release 2> /dev/null
@@ -22,7 +21,7 @@
         ansible_ssh_common_args: "{{ bootstrap_ansible_ssh_common_args }}"
 
     - name: Setup fact with operating system info
-      set_fact:
+      ansible.builtin.set_fact:
         bootstrap_distribution_name: >-
           {{ bootstrap_os_result.stdout
              | trim
@@ -35,7 +34,7 @@
         bootstrap_os_release_regex: "([a-zA-Z ]+) release ([0-9.]+).*"
 
     - name: Setup fact with ansible users authentication information to update
-      set_fact:
+      ansible.builtin.set_fact:
         bootstrap_ansible_user_to_update: "{{ ansible_user }}"
         bootstrap_ansible_new_password: >-
           {{ ansible_password

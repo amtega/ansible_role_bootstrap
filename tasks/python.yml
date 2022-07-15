@@ -2,7 +2,7 @@
 #  Tasks to setup python
 
 - name: Install python
-  script: files/install_python.sh
+  ansible.builtin.script: files/install_python.sh
   register: bootstrap_install_python_result
   changed_when: bootstrap_install_python_result.rc == 1
   failed_when: bootstrap_install_python_result.rc == 2

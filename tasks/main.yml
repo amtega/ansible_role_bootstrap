@@ -1,12 +1,13 @@
 ---
 # Bootstrap the server to use ansible
 
-- block:
+- name: Gather facts
+  block:
     - include_tasks: ansible_facts.yml
       when: not ansible_local.bootstrap.date is defined
   rescue:
     - name: Empty task placeholder
-      meta: noop
+      ansible.builtin.meta: noop
   vars:
     ansible_user: "{{ bootstrap_ansible_user }}"
     ansible_password: "{{ bootstrap_ansible_password }}"
@@ -18,29 +19,32 @@
   tags:
     - role::bootstrap
 
-- block:
+- name: Bootstrap host
+  block:
     - name: Gather ansible connection basic facts
       include_tasks: facts_basic.yml
 
-    - block:
+    - name: Perform bootstrap tasks
+      block:
         - name: Setup python
           include_tasks: install.yml
 
         - name: Gather ansible connection basic facts
           include_tasks: facts_extended.yml
 
-        - block:
+        - name: Setup users, authorized keys and python virtualenv
+          block:
             - name: Setup ansible users
               include_tasks: users.yml
 
-            - name: Setup SSH authorized keys
+            - name: Setup ssh authorized keys
               include_tasks: authorized_keys.yml
 
             - name: Setup python virtualenv
               include_tasks: virtualenv.yml
 
             - name: Reload facts
-              setup:
+              ansible.builtin.setup:
               when:
                 - bootstrap_reload_facts | bool
                 - >-
@@ -49,7 +53,6 @@
 
             - name: Setup local fact
               include_tasks: local_fact.yml
-
       vars:
         ansible_user: "{{ bootstrap_ansible_user }}"
         ansible_password: "{{ bootstrap_ansible_password }}"

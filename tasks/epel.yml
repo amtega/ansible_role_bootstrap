@@ -2,6 +2,6 @@
 #  Tasks to setup EPEL
 
 - name: Setup EPEL
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.epel
   when: bootstrap_distribution_version is version("7", "<")

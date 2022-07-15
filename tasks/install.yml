@@ -1,7 +1,7 @@
 ---
-# Role install tasks
 
-- block:
+- name: Setup python, epel and packages
+  block:
     - include_tasks: proxy_client.yml
     - include_tasks: python.yml
     - include_tasks: epel.yml

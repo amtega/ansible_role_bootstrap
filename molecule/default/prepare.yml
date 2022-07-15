@@ -6,18 +6,19 @@
   gather_facts: no
   tasks:
     - name: Setup python
-      raw: "yum install -y {{ ansible_python_interpreter | basename }}"
+      ansible.builtin.raw: >-
+        yum install -y {{ ansible_python_interpreter | basename }}
       when: yes
       args:
         warn: no
 
     - name: Allow interactive password ssh authentication
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^PasswordAuthentication no'
         line: PasswordAuthentication yes
 
     - name: Restart sshd service
-      service:
+      ansible.builtin.service:
         name: sshd
         state: restarted

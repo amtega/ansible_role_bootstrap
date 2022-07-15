@@ -1,9 +1,9 @@
 ---
-#  Tasks to setup users
 
-- block:
+- name: Setup users
+  block:
     - name: Setup ansible user home directory
-      user:
+      ansible.builtin.user:
         name: "{{ bootstrap_ansible_user_to_update }}"
         create_home: yes
       register: bootstrap_ansible_user_home_result
@@ -12,7 +12,7 @@
         - bootstrap_create_ansible_user_home | bool
 
     - name: Setup ansible user home directory parent dir
-      file:
+      ansible.builtin.file:
         path: "{{ bootstrap_ansible_user_home_result.home | dirname }}"
         owner: "{{ bootstrap_home_parent_dir_owner }}"
         group: "{{ bootstrap_home_parent_dir_group }}"
@@ -20,7 +20,7 @@
       when: bootstrap_ansible_user_home_result is changed
 
     - name: Setup ansible user
-      user:
+      ansible.builtin.user:
         name: "{{ bootstrap_ansible_user_to_update }}"
         shell: "{{ bootstrap_ansible_user_shell }}"
         group: "{{ bootstrap_ansible_user_group }}"
@@ -33,7 +33,7 @@
       no_log: yes
 
     - name: Setup ansible become user
-      user:
+      ansible.builtin.user:
         name: "{{ bootstrap_ansible_become_user_to_update }}"
         shell: "{{ bootstrap_ansible_become_user_shell }}"
         group: "{{ bootstrap_ansible_become_user_group }}"
@@ -48,7 +48,7 @@
       no_log: yes
 
     - name: Setup groups
-      include_role:
+      ansible.builtin.include_role:
         name: amtega.groups
       when: bootstrap_groups | length > 0
       vars:
@@ -57,7 +57,7 @@
         groups_no_log: "{{ bootstrap_no_log | bool }}"
 
     - name: Setup users
-      include_role:
+      ansible.builtin.include_role:
         name: amtega.users
       when: bootstrap_users | length > 0
       vars:

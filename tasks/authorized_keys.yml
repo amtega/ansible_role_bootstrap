@@ -1,9 +1,9 @@
 ---
-#  Tasks to setup ssh authorized keys
 
-- block:
-    - name: Setup SSH authorized keys
-      include_role:
+- name: Setup ssh authorized keys
+  block:
+    - name: Setup ssh authorized keys
+      ansible.builtin.include_role:
         name: amtega.authorized_keys
       vars:
         authorized_keys_load_from_hostvars: no
