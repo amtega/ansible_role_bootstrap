@@ -2,7 +2,7 @@
 #  Tasks to setup proxy client
 
 - name: Setup proxy client
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.proxy_client
   vars:
     proxy_client_permanent: no
