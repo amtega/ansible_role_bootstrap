@@ -1,11 +1,11 @@
 ---
 
-- name: Setup python virtualenv
+- name: Setup python virtualenv # noqa jinja[spacing]
   ansible.builtin.command: >-
     {{ virtualenv_command }} \
     --python={{ ansible_python_interpreter }} \
     {{ (bootstrap_python_virtualenv_site_packages)
-        | ternary("--system-site-packages", "") }} \
+       | ternary("--system-site-packages", "") }} \
     {{ virtualenv }}
   args:
     creates: "{{ virtualenv }}"
@@ -14,10 +14,10 @@
     virtualenv: "{{ bootstrap_python_virtualenv }}"
     virtualenv_command: >-
       {{ bootstrap_python_virtualenv_command
-          | default("/usr/bin/virtualenv") }}
+         | default("/usr/bin/virtualenv") }}
     virtualenv_site_packages: >-
       {{ bootstrap_python_virtualenv_site_packages
-          | default(none) }}
+         | default(none) }}
   when:
     - bootstrap_python_virtualenv is defined
     - bootstrap_python_virtualenv | length > 0

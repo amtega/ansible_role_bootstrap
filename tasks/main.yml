@@ -3,7 +3,7 @@
 
 - name: Gather facts
   block:
-    - include_tasks: ansible_facts.yml
+    - ansible.builtin.include_tasks: ansible_facts.yml
       when: not ansible_local.bootstrap.date is defined
   rescue:
     - name: Empty task placeholder
@@ -13,7 +13,7 @@
     ansible_password: "{{ bootstrap_ansible_password }}"
     ansible_become: "{{ bootstrap_become | default(false) }}"
     ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-    ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+    ansible_become_user: "{{ bootstrap_become_user | default('root') }}"
     ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
     ansible_ssh_common_args: "{{ bootstrap_ansible_ssh_common_args }}"
   tags:
@@ -58,7 +58,7 @@
         ansible_password: "{{ bootstrap_ansible_password }}"
         ansible_become: "{{ bootstrap_become | default(false) }}"
         ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_user: "{{ bootstrap_become_user | default('root') }}"
         ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
         ansible_ssh_common_args: "{{ bootstrap_ansible_ssh_common_args }}"
         ansible_python_interpreter: >-
