@@ -2,10 +2,10 @@
 
 - name: Setup python, epel and packages
   block:
-    - include_tasks: proxy_client.yml
-    - include_tasks: python.yml
-    - include_tasks: epel.yml
-    - include_tasks: packages.yml
+    - ansible.builtin.include_tasks: proxy_client.yml
+    - ansible.builtin.include_tasks: python.yml
+    - ansible.builtin.include_tasks: epel.yml
+    - ansible.builtin.include_tasks: packages.yml
   tags:
     - role::bootstrap
     - role::bootstrap::install
