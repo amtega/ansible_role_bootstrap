@@ -13,7 +13,7 @@
         ansible_password: "{{ bootstrap_ansible_password }}"
         ansible_become: "{{ bootstrap_become | default(false) }}"
         ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_user: "{{ bootstrap_become_user | default('root') }}"
         ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
         ansible_ssh_common_args: "{{ bootstrap_ansible_ssh_common_args }}"
         ansible_python_interpreter: >-
@@ -22,7 +22,7 @@
                  (bootstrap_distribution_version | string is version("8", "<"))
                  | ternary("/usr/bin/python",
                            "/usr/bin/python3")) }}
-      no_log: "{{ bootstrap_no_log  | bool }}"
+      no_log: "{{ bootstrap_no_log | bool }}"
 
     - name: Setup facts indicating if ansible user must be updated
       ansible.builtin.set_fact:

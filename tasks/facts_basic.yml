@@ -16,7 +16,7 @@
         ansible_password: "{{ bootstrap_ansible_password }}"
         ansible_become: "{{ bootstrap_become | default(false) }}"
         ansible_become_method: "{{ bootstrap_become_method | default('su') }}"
-        ansible_become_user: "{{  bootstrap_become_user | default('root') }}"
+        ansible_become_user: "{{ bootstrap_become_user | default('root') }}"
         ansible_become_pass: "{{ bootstrap_become_pass | default('') }}"
         ansible_ssh_common_args: "{{ bootstrap_ansible_ssh_common_args }}"
 
@@ -49,7 +49,7 @@
              | default('')
              | string
              | password_hash('sha512', 100000000000 | random | string) }}
-      no_log: "{{ bootstrap_no_log  | bool }}"
+      no_log: "{{ bootstrap_no_log | bool }}"
 
   tags:
     - role::bootstrap
