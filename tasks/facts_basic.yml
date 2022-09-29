@@ -25,13 +25,15 @@
         bootstrap_distribution_name: >-
           {{ bootstrap_os_result.stdout
              | trim
-             | regex_replace(bootstrap_os_release_regex, "\1") }}
+             | regex_replace(bootstrap_os_release_regex, "\1")
+             | lower }}
         bootstrap_distribution_version: >-
           {{ bootstrap_os_result.stdout
              | trim
-             | regex_replace(bootstrap_os_release_regex, "\2") }}
+             | regex_replace(bootstrap_os_release_regex, "\2")
+             | lower }}
       vars:
-        bootstrap_os_release_regex: "([a-zA-Z ]+) release ([0-9.]+).*"
+        bootstrap_os_release_regex: "([a-zA-Z]+).* release ([0-9.]+).*"
 
     - name: Setup fact with ansible users authentication information to update
       ansible.builtin.set_fact:
