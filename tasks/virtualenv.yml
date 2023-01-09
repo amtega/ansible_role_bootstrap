@@ -3,7 +3,8 @@
 - name: Setup python virtualenv # noqa jinja[spacing]
   ansible.builtin.command: >-
     {{ virtualenv_command }} \
-    --python={{ ansible_python_interpreter }} \
+    --python={{ packages_python_virtualenv_python
+                | default(ansible_python_interpreter) }} \
     {{ (bootstrap_python_virtualenv_site_packages)
        | ternary("--system-site-packages", "") }} \
     {{ virtualenv }}
@@ -11,10 +12,16 @@
     creates: "{{ virtualenv }}"
   register: bootstrap_setup_venv_result
   vars:
+    distribution_major_version: >-
+      {{ bootstrap_distribution_version.split(".") | first }}
     virtualenv: "{{ bootstrap_python_virtualenv }}"
+    virtualenv_default_command: >-
+      {{ (distribution_major_version == "7")
+         | ternary("/usr/bin/virtualenv-3",
+                   "/usr/bin/virtualenv") }}
     virtualenv_command: >-
       {{ bootstrap_python_virtualenv_command
-         | default("/usr/bin/virtualenv") }}
+         | default(virtualenv_default_command) }}
     virtualenv_site_packages: >-
       {{ bootstrap_python_virtualenv_site_packages
          | default(none) }}

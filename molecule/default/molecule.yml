@@ -57,6 +57,7 @@ provisioner:
           bootstrap_become_user: root
           bootstrap_become_pass: vagrant
           bootstrap_seconds_to_run: 300
+          bootstrap_python_virtualenv: /var/ansible-venv
           bootstrap_no_log: no
 
           bootstrap_groups:
