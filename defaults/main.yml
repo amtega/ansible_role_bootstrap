@@ -60,8 +60,8 @@ bootstrap_ansible_become_user_shell: /bin/bash
 #
 # bootstrap_python_virtualenv:
 # bootstrap_python_virtualenv_command:
-# bootstrap_python_virtualenv_python:
-# bootstrap_python_virtualenv_site_packages:
+bootstrap_python_virtualenv_python: /usr/bin/python3
+bootstrap_python_virtualenv_site_packages: yes
 
 # Reload facts at the end of the bootstrapping process
 
